@@ -31,6 +31,10 @@ The following content will partially solve the above predicament, enabling you t
 6. `--biblipgraphy=my_ref.bib` generates the reference list using `my_ref.bib`.
 7. The `--citeproc --csl ieee.csl` generates the references in the `ieee` format.
 
+### Running Test 
+
+Go to `./test` and run `bash ./run.sh`.
+
 ## Outstanding Issues
 
 1. "Error" may raise when opening the converted docx document. This is likely due to the complexity of the tex file being converted. Try reducing the number of images and avoiding the use of tikz, for example.
