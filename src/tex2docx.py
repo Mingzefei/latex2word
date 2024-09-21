@@ -1,3 +1,4 @@
+import argparse
 import os
 import glob
 import subprocess
@@ -339,6 +340,21 @@ class LatexToWordConverter:
         self.compile_multifig_texfiles()
         self.generate_modified_texfile()
         self.convert_modified_texfile()
+        
+def main():
+    parser = argparse.ArgumentParser(description='Convert LaTeX to Word.')
+    parser.add_argument('--input_texfile', required=True, help='The path to the input LaTeX file.')
+    parser.add_argument('--multifig_dir', required=True, help='The directory where the generated multi-figure LaTeX files will be stored.')
+    parser.add_argument('--output_docxfile', required=True, help='The path to the output Word document file.')
+    parser.add_argument('--reference_docfile', required=True, help='The path to the reference Word document file.')
+    parser.add_argument('--bibfile', required=True, help='The path to the BibTeX file.')
+    parser.add_argument('--cslfile', required=True, help='The path to the CSL file.')
+    parser.add_argument('--debug', action='store_true', help='Enable debug mode.')
+
+    args = parser.parse_args()
+
+    converter = LatexToWordConverter(args.input_texfile, args.multifig_dir, args.output_docxfile, args.reference_docfile, args.bibfile, args.cslfile, args.debug)
+    converter.convert()
 
 if __name__ == "__main__":
-    pass
+    main()
