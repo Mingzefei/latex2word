@@ -1,0 +1,17 @@
+
+\documentclass[preview,convert,convert={outext=.png,command=\unexpanded{pdftocairo -r 600 -png \infile}}]{standalone}
+\usepackage{graphicx}
+\usepackage{subfig}
+\graphicspath{{/home/ming/academic/tools/latex2word/tests/en/figures}}
+
+\begin{document}
+\thispagestyle{empty}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{main.png}
+    % \caption{
+%        A diagram of the proposed method, which contains four main steps.
+%    }
+    \label{fig:main}
+\end{figure}
+\end{document}

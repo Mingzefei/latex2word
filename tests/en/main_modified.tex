@@ -23,7 +23,7 @@
 % Graphics
 \usepackage{graphicx}
 \usepackage{subfig} 
-\graphicspath{{./figures}} % Adjust path as needed
+\graphicspath{{/home/ming/academic/tools/latex2word/tests/en/multifigs}} % Adjust path as needed
 
 \title{This is only an example}
 
@@ -63,27 +63,17 @@ To achieve this universally and automatically, the overall process is divided in
 
 \subsection{Directed graph Model}
 
+
 \begin{figure}[htbp]
     \centering
-    \subfloat[]{
-        \includegraphics[width=0.31\linewidth]{direct-graph-he.png}
-    }
-    \subfloat[]{
-        \includegraphics[width=0.23\linewidth]{direct-graph-xu.png}
-    }
-    \subfloat[]{
-        \includegraphics[width=0.24\linewidth]{direct-graph-my.png}
-    }
-    \\
-    \subfloat[]{
-        \includegraphics[width=0.8\linewidth]{battery_simple.png}
-    }
-    \caption{
+    \includegraphics[width=0.8\linewidth]{model.png}
+    \caption{{
         The directed graph models used in (a) the work of He et al. \cite{heExploringAdaptiveReconfiguration2013}, (b) our previous work, and (c) the improved model in this paper.
         (d) The equivalent circuit of a battery in this method.
-    }
+    }}
     \label{fig:model}
 \end{figure}
+
 
 % He et al. \cite{heExploringAdaptiveReconfiguration2013} proposed an abstracted directed graph model for an RBS, where the nodes represent the batteries, the edges represent the configuration flexibility, and the weight of each vertex corresponds to the battery voltage (Fig. \ref{fig:direct-graph-he}). 
 % The model captures all potential system configurations and offers a direct metric for configuration flexibility, but it does not specify the physical implementation of the connectivity between batteries, meaning that one graph might correspond to multiple RBS structures.
@@ -134,6 +124,6 @@ Similar to Eq. \eqref{eq:A_bso}, $\boldsymbol{\tilde{A}}$ can be rewritten as
 \end{equation}
 
 \bibliographystyle{ieeetr}
-\bibliography{ref}
+\bibliography{../ref}
 
 \end{document}

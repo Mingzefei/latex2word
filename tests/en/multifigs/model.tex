@@ -1,0 +1,30 @@
+
+\documentclass[preview,convert,convert={outext=.png,command=\unexpanded{pdftocairo -r 600 -png \infile}}]{standalone}
+\usepackage{graphicx}
+\usepackage{subfig}
+\graphicspath{{/home/ming/academic/tools/latex2word/tests/en/figures}}
+
+\begin{document}
+\thispagestyle{empty}
+\begin{figure}[htbp]
+    \centering
+    \subfloat[]{
+        \includegraphics[width=0.31\linewidth]{direct-graph-he.png}
+    }
+    \subfloat[]{
+        \includegraphics[width=0.23\linewidth]{direct-graph-xu.png}
+    }
+    \subfloat[]{
+        \includegraphics[width=0.24\linewidth]{direct-graph-my.png}
+    }
+    \\
+    \subfloat[]{
+        \includegraphics[width=0.8\linewidth]{battery_simple.png}
+    }
+    % \caption{
+%        The directed graph models used in (a) the work of He et al. \cite{heExploringAdaptiveReconfiguration2013}, (b) our previous work, and (c) the improved model in this paper.
+%        (d) The equivalent circuit of a battery in this method.
+%    }
+    \label{fig:model}
+\end{figure}
+\end{document}
