@@ -6,6 +6,7 @@ import shutil
 import logging
 import regex
 from tqdm import tqdm
+import uuid
 
 # Templates and patterns
 MULTIFIG_TEXFILE_TEMPLATE = r"""
@@ -49,11 +50,12 @@ class LatexToWordConverter:
         # Initialize file paths
         self.input_texfile = os.path.abspath(input_texfile)
         self.multifig_dir = os.path.abspath(multifig_dir)
-        self.output_texfile = os.path.abspath(os.path.basename(self.input_texfile).replace('.tex', '_modified.tex'))
+        self.output_texfile = os.path.abspath(input_texfile.replace('.tex', '_modified.tex'))
         self.output_docxfile = os.path.abspath(output_docxfile)
         self.reference_docfile = os.path.abspath(reference_docfile)
         self.bibfile = os.path.abspath(bibfile)
         self.cslfile = os.path.abspath(cslfile)
+        self.luafile = os.path.join(os.path.dirname(os.path.abspath(__file__)),'resolve_equation_labels.lua')
 
         # Initialize other attributes
         self._raw_content = None
@@ -63,12 +65,21 @@ class LatexToWordConverter:
         self.generated_multifig_texfiles = set()
 
         # Initialize logger
-        self.logger = logging.getLogger(__name__)
+        self.logger = logging.getLogger(f"{__name__}_{uuid.uuid4().hex[:6]}")
         handler = logging.StreamHandler()
-        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
         handler.setFormatter(formatter)
         self.logger.addHandler(handler)
         self.logger.setLevel(logging.DEBUG if debug else logging.INFO)
+        
+        self.logger.debug(f'Init input texfile: {self.input_texfile}')
+        self.logger.debug(f'Init multifig_dir: {self.multifig_dir}')
+        self.logger.debug(f'Init output texfile: {self.output_texfile}')
+        self.logger.debug(f'Init output docxfile: {self.output_docxfile}')
+        self.logger.debug(f'Init reference docfile: {self.reference_docfile}')
+        self.logger.debug(f'Init bibfile: {self.bibfile}')
+        self.logger.debug(f'Init cslfile: {self.cslfile}')
+        self.logger.debug(f'Init luafile: {self.luafile}')
 
     def _match_pattern(self, pattern, content, multiple=False):
         """
@@ -109,7 +120,7 @@ class LatexToWordConverter:
         else:
             self._raw_graphicspath = os.path.abspath(os.path.dirname(self.input_texfile))
 
-            self.logger.debug(f'Using {self._raw_graphicspath} as the input figure directory.')
+            self.logger.debug(f'Init input figure directory(_raw_graphicspath): {self._raw_graphicspath}')
         
         self.logger.info(f'Read {os.path.basename(self.input_texfile)} texfile and found {len(self._raw_fig_contents)} figenvs.')
 
@@ -125,7 +136,9 @@ class LatexToWordConverter:
         """
         default_counter = 1
 
-        os.makedirs(self.multifig_dir, exist_ok=True)
+        if os.path.exists(self.multifig_dir):
+            shutil.rmtree(self.multifig_dir)
+        os.makedirs(self.multifig_dir)
 
         for figure_content in self._raw_fig_contents:
             # Define a function to prepend a '%' character to each caption line
@@ -285,6 +298,7 @@ class LatexToWordConverter:
         # Define the command
         command = [
             'pandoc', self.output_texfile, '-o', self.output_docxfile,
+            '--lua-filter', self.luafile,
             '--filter', 'pandoc-crossref',
             '--reference-doc='+self.reference_docfile,
             '--number-sections',
@@ -327,14 +341,4 @@ class LatexToWordConverter:
         self.convert_modified_texfile()
 
 if __name__ == "__main__":
-    config = {
-        'input_texfile': '../test/main.tex',
-        'output_docxfile': '../test/main.docx',
-        'multifig_dir': '../test/multifigs',
-        'reference_docfile': '../test/my_temp.docx',
-        'cslfile': '../test/ieee.csl',
-        'bibfile': '../test/ref.bib',
-        'debug': False
-    }
-    converter = LatexToWordConverter(**config)
-    converter.convert()
+    pass
