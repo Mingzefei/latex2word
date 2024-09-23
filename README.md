@@ -12,6 +12,13 @@ This project provides a Python script that uses Pandoc and Pandoc-Crossref tools
 - Outputs Word documents in a specified format
 - Supports Chinese language
 
+The effect is as follows, for more results please see `tests`:
+
+<p align="center">
+  <img src=".assets/en-word-1.jpg" width="200"/>
+  <img src=".assets/en-word-2.jpg" width="200"/>
+</p>
+
 ## Quick Start
 
 Ensure all dependencies such as Pandoc and Pandoc-Crossref are properly installed, see [Installing Dependencies](#installing-dependencies). Execute the following command in the command line:

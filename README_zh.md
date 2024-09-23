@@ -11,6 +11,14 @@
 - 支持按照指定格式输出 Word
 - 支持中文
 
+效果如下，更多的结果请看 `tests` ：
+
+<p align="center">
+  <img src=".assets/en-word-1.jpg" width="200"/>
+  <img src=".assets/en-word-2.jpg" width="200"/>
+</p>
+
+
 ## 快速使用
 
 确保已正确安装 Pandoc 和 Pandoc-Crossref 等依赖，详见[安装依赖](#安装依赖)。在命令行中执行以下命令：
@@ -95,8 +103,10 @@ converter.convert()
 
 1. 多子图相对位置与原始 tex 文件编译结果不同，如以下两张图
 
-![](.assets/raw_multifig_multi-L-charge-equalization.png)
-![](.assets/modified_multifig_multi-L-charge-equalization.png)
+<p align="center">
+  <img src=".assets/raw_multifig_multi-L-charge-equalization.png" width="200"/>
+  <img src=".assets/modified_multifig_multi-L-charge-equalization.png" width="200"/>
+</p>
 
 可能是因为原始 tex 文件重新定义了页面尺寸等参数，需要将相关 tex 代码添加到 `MULTIFIG_TEXFILE_TEMPLATE` 变量中。以下为一个示例，请根据实际情况修改：
 ```python
@@ -134,7 +144,7 @@ converter = tex2docx.LatexToWordConverter(**config)
 converter.convert()
 ```
 
-2. 输出 Word 文件的格式仍不满足需求
+1. 输出 Word 文件的格式仍不满足需求
 
 利用 Word 的样式管理，修改 `my_temp.docx` 文件中的样式。
 
