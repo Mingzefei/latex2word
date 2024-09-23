@@ -49,45 +49,48 @@ Reconfigurable battery systems provide a promising alternative to traditional ba
 \section{Methodology}
 
 The central principle of the proposed method is to connect the batteries in an RBS in parallel to the maximum possible extent, thereby maximizing the output current.
-To achieve this universally and automatically, the overall process is divided into the four steps shown in Fig. \ref{fig:main}.
+To achieve this universally and automatically, the overall process is divided into the four steps shown in Fig. \ref{multifig:multifig_main}.
 ...
+
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.8\linewidth]{main.png}
+    \includegraphics[width=0.8\linewidth]{multifig_main.png}
     \caption{
         A diagram of the proposed method, which contains four main steps.
     }
-    \label{fig:main}
+    \label{multifig:multifig_main}
 \end{figure}
+
 
 \subsection{Directed graph Model}
 
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.8\linewidth]{model.png}
-    \caption{{
+    \includegraphics[width=0.8\linewidth]{multifig_model.png}
+    \caption{
         The directed graph models used in (a) the work of He et al. \cite{heExploringAdaptiveReconfiguration2013}, (b) our previous work, and (c) the improved model in this paper.
         (d) The equivalent circuit of a battery in this method.
-    }}
-    \label{fig:model}
+    }
+    \label{multifig:multifig_model}
 \end{figure}
 
 
-% He et al. \cite{heExploringAdaptiveReconfiguration2013} proposed an abstracted directed graph model for an RBS, where the nodes represent the batteries, the edges represent the configuration flexibility, and the weight of each vertex corresponds to the battery voltage (Fig. \ref{fig:direct-graph-he}). 
-% The model captures all potential system configurations and offers a direct metric for configuration flexibility, but it does not specify the physical implementation of the connectivity between batteries, meaning that one graph might correspond to multiple RBS structures.
-% We previously proposed a directed graph model that differs significantly from He et al.'s model by using nodes to represent the connections between batteries and switches and directed edges to represent batteries and switches (Fig. \ref{fig:direct-graph-xu}), allowing for a one-to-one correspondence between an RBS structure and its directed graph model. 
-% ...
-% The model also considers the external load as an equivalent resistance and integrates it into the analysis, making it a complete circuit model for later circuit analysis.
-% Fig. \ref{fig:direct-graph-my} shows the improved directed graph model used in this paper.
-% The following provides a detailed explanation of the method used for equating components in RBSs and constructing the directed graph model.
+(Check the ref of subfigures)
+He et al. \cite{heExploringAdaptiveReconfiguration2013} proposed an abstracted directed graph model for an RBS, where the nodes represent the batteries, the edges represent the configuration flexibility, and the weight of each vertex corresponds to the battery voltage (Fig. \ref{multifig:multifig_model}(a)). 
+...
+We previously proposed a directed graph model that differs significantly from He et al.'s model by using nodes to represent the connections between batteries and switches and directed edges to represent batteries and switches (Fig. \ref{multifig:multifig_model}(b)), allowing for a one-to-one correspondence between an RBS structure and its directed graph model. 
+...
+Fig. \ref{multifig:multifig_model}(c) shows the improved directed graph model used in this paper.
+The following provides a detailed explanation of the method used for equating components in RBSs and constructing the directed graph model.
 
-He et al. \cite{heExploringAdaptiveReconfiguration2013} proposed an abstracted directed graph model for an RBS, where the nodes represent the batteries, the edges represent the configuration flexibility, and the weight of each vertex corresponds to the battery voltage (Fig. \ref{fig:model}(a)). 
+
+He et al. \cite{heExploringAdaptiveReconfiguration2013} proposed an abstracted directed graph model for an RBS, where the nodes represent the batteries, the edges represent the configuration flexibility, and the weight of each vertex corresponds to the battery voltage (Fig. \ref{multifig:multifig_model}(a)). 
 ...
-We previously proposed a directed graph model that differs significantly from He et al.'s model by using nodes to represent the connections between batteries and switches and directed edges to represent batteries and switches (Fig. \ref{fig:model}(b)), allowing for a one-to-one correspondence between an RBS structure and its directed graph model. 
+We previously proposed a directed graph model that differs significantly from He et al.'s model by using nodes to represent the connections between batteries and switches and directed edges to represent batteries and switches (Fig. \ref{multifig:multifig_model}(b)), allowing for a one-to-one correspondence between an RBS structure and its directed graph model. 
 ...
-Fig. \ref{fig:model}(c) shows the improved directed graph model used in this paper.
+Fig. \ref{multifig:multifig_model}(c) shows the improved directed graph model used in this paper.
 The following provides a detailed explanation of the method used for equating components in an RBS and constructing the directed graph model.
 
 

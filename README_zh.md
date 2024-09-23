@@ -1,21 +1,22 @@
 # LaTeX 到 Word 文件转换工具
 
 本项目提供一个 Python 脚本，利用 Pandoc 和 Pandoc-Crossref 工具，将 LaTeX 文件自动地按照指定格式转换为 Word 文件。
-需要说明的是，目前仍没有能够将 LaTeX 转换为 Word 的完美方法，本项目生成的 Word 文件可满足一般的审阅和修改需求，其中约 5% 的内容（如作者信息等）可能需要在转换后手动更正。
+需要说明的是，目前仍没有完美将 LaTeX 转换为 Word 的方法，本项目生成的 Word 文件可满足非正式的审阅需求，其中约 5% 的内容（如作者信息等非正文内容）可能需要在转换后手动更正。
 
 ## 特性
 
-- 支持公式的转换；
-- 支持图片、表格、公式和参考文献的自动编号及交叉引用；
-- 支持多子图；
-- 基本支持按照指定格式输出 Word。
+- 支持公式的转换
+- 支持图片、表格、公式和参考文献的自动编号及交叉引用
+- 支持多子图的转换
+- 支持按照指定格式输出 Word
+- 支持中文
 
 ## 快速使用
 
 确保已正确安装 Pandoc 和 Pandoc-Crossref 等依赖，详见[安装依赖](#安装依赖)。在命令行中执行以下命令：
 
 ```shell
-python ./src/tex2docx.py --input_texfile <your_texfile> --multifig_dir <dir_saving_temporary_figs> --output_docxfile <your_docxfile> --reference_docfile <your_reference_docfile> --bibfile <your_bibfile> --cslfile <your_cslfile>
+python ./tex2docx/tex2docx.py --input_texfile <your_texfile> --multifig_dir <dir_saving_temporary_figs> --output_docxfile <your_docxfile> --reference_docfile <your_reference_docfile> --bibfile <your_bibfile> --cslfile <your_cslfile>
 ```
 
 将命令中的 `<...>` 替换为相应文件路径或文件夹名称即可。
@@ -44,12 +45,12 @@ pip install -e .
 
 支持命令行和脚本两种使用方式，确保已安装所需依赖。
 
-### 命令行使用
+### 命令行方式
 
 在终端执行以下命令：
 
 ```shell
-python ./src/tex2docx.py --input_texfile <your_texfile> --multifig_dir <dir_saving_temporary_figs> --output_docxfile <your_docxfile> --reference_docfile <your_reference_docfile> --bibfile <your_bibfile> --cslfile <your_cslfile>
+python ./tex2docx/tex2docx.py --input_texfile <your_texfile> --multifig_dir <dir_saving_temporary_figs> --output_docxfile <your_docxfile> --reference_docfile <your_reference_docfile> --bibfile <your_bibfile> --cslfile <your_cslfile>
 ```
 
 参数说明：
@@ -65,16 +66,13 @@ python ./src/tex2docx.py --input_texfile <your_texfile> --multifig_dir <dir_savi
 以 `tests/en` 测试案例为例，在仓库目录下执行如下命令：
 
 ```shell
-python ./src/tex2docx.py --input_texfile ./tests/en/main.tex --multifig_dir ./tests/en/multifigs --output_docxfile ./tests/en/main_cli.docx --reference_docfile ./my_temp.docx --bibfile ./tests/ref.bib --cslfile ./ieee.csl
+python ./tex2docx/tex2docx.py --input_texfile ./tests/en/main.tex --multifig_dir ./tests/en/multifigs --output_docxfile ./tests/en/main_cli.docx --reference_docfile ./my_temp.docx --bibfile ./tests/ref.bib --cslfile ./ieee.csl
 ```
 则可以在 `tests/en` 目录下找到转换后的 `main_cli.docx` 文件。
 
-### 脚本使用
-
-创建脚本 `my_convert.py` ，写入以下代码，并执行：
+### 脚本方式
 
 ```python
-# my_convert.py
 from tex2docx import LatexToWordConverter
 
 config = {
@@ -93,7 +91,54 @@ converter.convert()
 
 案例可以参考`tests/test_tex2docx.py`。
 
-## 实现原理及参考资料
+## 常见问题
+
+1. 多子图相对位置与原始 tex 文件编译结果不同，如以下两张图
+
+![](.assets/raw_multifig_multi-L-charge-equalization.png)
+![](.assets/modified_multifig_multi-L-charge-equalization.png)
+
+可能是因为原始 tex 文件重新定义了页面尺寸等参数，需要将相关 tex 代码添加到 `MULTIFIG_TEXFILE_TEMPLATE` 变量中。以下为一个示例，请根据实际情况修改：
+```python
+import tex2docx
+
+my_multifig_texfile_template = r"""
+\documentclass[preview,convert,convert={outext=.png,command=\unexpanded{pdftocairo -r 600 -png \infile}}]{standalone}
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage{xeCJK}
+\usepackage{geometry}
+\newgeometry{
+    top=25.4mm, bottom=33.3mm, left=20mm, right=20mm,
+    headsep=10.4mm, headheight=5mm, footskip=7.9mm,
+}
+\graphicspath{{%s}}
+
+\begin{document}
+\thispagestyle{empty}
+%s
+\end{document}
+"""
+
+config = {
+    'input_texfile': 'tests/en/main.tex',
+    'output_docxfile': 'tests/en/main.docx',
+    'multifig_dir': 'tests/en/multifigs',
+    'reference_docfile': 'my_temp.docx',
+    'cslfile': 'ieee.csl',
+    'bibfile': 'tests/ref.bib',
+    'multifig_texfile_template': my_multifig_texfile_template,
+}
+
+converter = tex2docx.LatexToWordConverter(**config)
+converter.convert()
+```
+
+2. 输出 Word 文件的格式仍不满足需求
+
+利用 Word 的样式管理，修改 `my_temp.docx` 文件中的样式。
+
+## 实现原理
 
 该项目核心是使用 Pandoc 和 Pandoc-Crossref 工具实现 LaTeX 到 Word 的转换，具体配置如下：
 
@@ -107,29 +152,33 @@ pandoc texfile -o docxfile \
     -M tableEqns \
     -M reference-section-title=Reference \
     --bibliography=ref.bib \
-    --citeproc --csl ieee.csl
+    --citeproc --csl ieee.csl \
+    -t docx+native_numbering
 ```
 
 其中，
 1. `--lua-filter resolve_equation_labels.lua` 处理公式编号及公式交叉引用，受 Constantin Ahlmann-Eltze 的[脚本](https://gist.githubusercontent.com/const-ae/752ad85c43d92b72865453ea3a77e2dd/raw/28c1815979e5d03cd9ab3638f9befd354797a72b/resolve_equation_labels.lua)启发；
 2. `--filter pandoc-crossref` 处理除公式以外的交叉引用；
-3. `--reference-doc=my_temp.docx` 依照 `my_temp.docx` 中的样式生成 Word 文件。仓库 [Mingzefei/latex2word](https://github.com/Mingzefei/latex2word) 提供了两个模板文件 `TIE-temp.docx` 和 `my_temp.docx`，前者是 TIE 期刊的投稿 Word 模板（双栏），后者是个人调整出的 Word 模板（单栏，且便于批注）；
+3. `--reference-doc=my_temp.docx` 依照 `my_temp.docx` 中的样式生成 Word 文件。本仓库提供了两个模板文件 `TIE-temp.docx` 和 `my_temp.docx`，前者是 TIE 期刊的投稿 Word 模板（双栏），后者是个人调整出的 Word 模板（单栏，且便于批注）；
 4. `--number-sections` 在（子）章节标题前添加数字编号；
 5. `-M autoEqnLabels`， `-M tableEqns`设置公式、表格等的编号；
 6. `-M reference-sction-title=Reference` 在参考文献部分添加章节标题 Reference；
 7. `--biblipgraphy=my_ref.bib` 使用 `ref.bib` 生成参考文献；
-8. `--citeproc --csl ieee.csl` 生成的参考文献格式为 `ieee` 。
+8. `--citeproc --csl ieee.csl` 生成的参考文献格式为 `ieee` ；
+9. `-t docx+native_numbering` 优化图片和表格的 caption。
 
-然而，上述方法在直接处理包含多子图的 Latex 文件时可能遇到图片无法正常导入和引用编号错误等问题。为此，本项目通过提取 LaTeX 文件中的多子图代码，使用 LaTeX 自带的 `convert` 和 `pdftocairo` 工具自动化编译这些图片为单个大图形式的 PNG 文件；然后，这些 PNG 文件将替换原始 LaTeX 文档中的相应图片代码，从而确保多子图形式的图片被顺利导入。具体的实现代码见 `tex2docx.py`。
+然而，上述方法对多子图转换效果不佳。
+本项目通过提取 LaTeX 文件中的多子图代码，并利用 LaTeX 的 `convert` 与 `pdftocairo` 工具自动编译这些图片为单一大图 PNG 文件。然后，这些 PNG 文件将替代原始 LaTeX 文档中的相应图片代码，并更新相关引用，确保多子图图片能顺利导入。
+
 
 ## 遗留问题
 
-1. 子图引用请统一使用 `\ref{<figure_lab>}(a)` 形式，而非 `\ref{<subfigure_lab>}`（后续会支持直接引用子图）；
-2. 导出 Word 文件的图片 caption 格式和作者信息需要手动调整。
+1. 中文的图表 caption 仍以 Fiugre 和 Table 开头；
+2. 作者信息无法完整转换。
 
 ## 其他
 
-世界上有两种人，一种人会用 Latex，另一种人不会用 Latex。 后者常常向前者要 Word 版本文件。 因此有了如下一行命令。
+世界上有两种人，一种人会用 Latex，另一种人不会用 Latex。 后者常常向前者索要 Word 版本文件。 因此有了如下一行命令。
 
 ```bash
 pandoc input.tex -o output.docx\
@@ -139,5 +188,6 @@ pandoc input.tex -o output.docx\
   -M autoEqnLabels -M tableEqns \
   -M reference-section-title=Reference \
   --bibliography=my_ref.bib \
-  --citeproc --csl ieee.csl
+  --citeproc --csl ieee.csl \
+  -t docx+native_numbering
 ```

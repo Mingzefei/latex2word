@@ -1,38 +1,38 @@
 # LaTeX to Word Conversion Tool
 
-[中文版本](README_zh.md)
+[简体中文](./README_zh.md)
 
-This project provides a Python script that utilizes Pandoc and Pandoc-Crossref tools to automatically convert LaTeX files into Word documents in a specified format.
-It should be noted that there is currently no perfect way to convert LaTeX to Word. The Word documents produced by this project can meet general review and editing needs, although about 5% of the content (such as author information) may need to be manually corrected after conversion.
+This project provides a Python script that uses Pandoc and Pandoc-Crossref tools to automatically convert LaTeX files into Word documents in a specified format. It's important to note that there is no perfect method to convert LaTeX to Word, and the Word documents produced by this project are suitable for informal review purposes, with about 5% of the content (such as author information and other non-text elements) possibly requiring manual correction after conversion.
 
 ## Features
 
-- Supports the conversion of formulas;
-- Supports automatic numbering and cross-referencing of images, tables, formulas, and references;
-- Supports multi-figure images;
-- Generally supports outputting Word in a specified format.
+- Supports the conversion of equations
+- Supports automatic numbering and cross-referencing of images, tables, equations, and references
+- Supports the conversion of multi-figure images
+- Outputs Word documents in a specified format
+- Supports Chinese language
 
 ## Quick Start
 
-Ensure that Pandoc, Pandoc-Crossref, and other dependencies are correctly installed, as detailed in [Installing Dependencies](#installing-dependencies). Execute the following command in the terminal:
+Ensure all dependencies such as Pandoc and Pandoc-Crossref are properly installed, see [Installing Dependencies](#installing-dependencies). Execute the following command in the command line:
 
 ```shell
-python ./src/tex2docx.py --input_texfile <your_texfile> --multifig_dir <dir_saving_temporary_figs> --output_docxfile <your_docxfile> --reference_docfile <your_reference_docfile> --bibfile <your_bibfile> --cslfile <your_cslfile>
+python ./tex2docx/tex2docx.py --input_texfile <your_texfile> --multifig_dir <dir_saving_temporary_figs> --output_docxfile <your_docxfile> --reference_docfile <your_reference_docfile> --bibfile <your_bibfile> --cslfile <your_cslfile>
 ```
 
-Replace `<...>` in the command with the appropriate file paths or folder names.
+Replace `<...>` in the command with the appropriate file paths or directory names.
 
 ## Installing Dependencies
 
-You need to install Pandoc, Pandoc-Crossref, and related Python libraries.
+You will need to install Pandoc, Pandoc-Crossref, and related Python libraries.
 
 ### Pandoc
 
-Install Pandoc by referring to the [Pandoc Official Documentation](https://github.com/jgm/pandoc/blob/main/INSTALL.md). It is recommended to download the latest installation package from [Pandoc Releases](https://github.com/jgm/pandoc/releases).
+Install Pandoc, see [Pandoc Official Documentation](https://github.com/jgm/pandoc/blob/main/INSTALL.md). It is recommended to download the latest package from [Pandoc Releases](https://github.com/jgm/pandoc/releases).
 
 ### Pandoc-Crossref
 
-Install Pandoc-Crossref as detailed in the [Pandoc-Crossref Official Documentation](https://github.com/lierdakil/pandoc-crossref). Ensure you download the version of Pandoc-Crossref that matches your Pandoc installation and configure the path appropriately.
+Install Pandoc-Crossref, see [Pandoc-Crossref Official Documentation](https://github.com/lierdakil/pandoc-crossref). Ensure you download the version that matches your Pandoc installation and configure the path appropriately.
 
 ### Related Python Libraries
 
@@ -42,40 +42,37 @@ Install Python dependencies:
 pip install -e .
 ```
 
-## Usage and Examples
+## Usage Instructions and Examples
 
-The tool supports both command line and script usage, ensure all required dependencies are installed.
+Supports both command line and script usage methods, ensure required dependencies are installed.
 
-### Command Line Usage
+### Command Line Method
 
 Execute the following command in the terminal:
 
 ```shell
-python ./src/tex2docx.py --input_texfile <your_texfile> --multifig_dir <dir_saving_temporary_figs> --output_docxfile <your_docxfile> --reference_docfile <your_reference_docfile> --bibfile <your_bibfile> --cslfile <your_cslfile>
+python ./tex2docx/tex2docx.py --input_texfile <your_texfile> --multifig_dir <dir_saving_temporary_figs> --output_docxfile <your_docxfile> --reference_docfile <your_reference_docfile> --bibfile <your_bibfile> --cslfile <your_cslfile>
 ```
 
 Parameter explanations:
-- `--input_texfile`: Specifies the path of the LaTeX file to convert.
-- `--multifig_dir`: Specifies the directory for temporarily storing generated multi-figures.
-- `--output_docxfile`: Specifies the path of the output Word document.
-- `--reference_docfile`: Specifies a Word reference document to ensure consistency in document styling.
-- `--bibfile`: Specifies the BibTeX file for document citations.
-- `--cslfile`: Specifies the Citation Style Language file to control the formatting of references.
-- `--debug`: Enables debug mode to output more run-time information, helpful for troubleshooting.
+- `--input_texfile`: Specify the path to the LaTeX file to be converted.
+- `--multifig_dir`: Specify the directory for temporarily storing generated multi-figure images.
+- `--output_docxfile`: Specify the path for the output Word document.
+- `--reference_docfile`: Specify a Word format reference document to ensure consistency in document style.
+- `--bibfile`: Specify the BibTeX file for document citations.
+- `--cslfile`: Specify the Citation Style Language file to control the formatting of references.
+- `--debug`: Enable debug mode to output additional runtime information, helpful for troubleshooting.
 
-For example, using the `tests/en` test case, execute the following command in the repository directory:
+For example, in the `tests/en` test case, execute the following command in the repository directory:
 
 ```shell
-python ./src/tex2docx.py --input_texfile ./tests/en/main.tex --multifig_dir ./tests/en/multifigs --output_docxfile ./tests/en/main_cli.docx --reference_docfile ./my_temp.docx --bibfile ./tests/ref.bib --cslfile ./ieee.csl
+python ./tex2docx/tex2docx.py --input_texfile ./tests/en/main.tex --multifig_dir ./tests/en/multifigs --output_docxfile ./tests/en/main_cli.docx --reference_docfile ./my_temp.docx --bibfile ./tests/ref.bib --cslfile ./ieee.csl
 ```
 You will find the converted `main_cli.docx` file in the `tests/en` directory.
 
-### Script Usage
-
-Create the script `my_convert.py`, write the following code, and execute:
+### Script Method
 
 ```python
-# my_convert.py
 from tex2docx import LatexToWordConverter
 
 config = {
@@ -92,11 +89,59 @@ converter = LatexToWordConverter(**config)
 converter.convert()
 ```
 
-Examples can be found in `tests/test_tex2docx.py`.
+You can refer to the example in `tests/test_tex2docx.py`.
 
-## Implementation Principles and References
+## Common Issues
 
-The core of this project is the use of Pandoc and Pandoc-Crossref tools to convert LaTeX to Word, configured as follows:
+1. The relative positions of multi-figures differ from the original tex file compilation results, as shown in the two images below:
+
+![](.assets/raw_multifig_multi-L-charge-equalization.png)
+![](.assets/modified_multifig_multi-L-charge-equalization.png)
+
+This may be due to the original tex file redefining page size parameters; add the relevant tex code to the `MULTIFIG_TEXFILE_TEMPLATE` variable. Here is an example, modify according to actual needs:
+
+```python
+import tex2docx
+
+my_multifig_texfile_template = r"""
+\documentclass[preview,convert,convert={outext=.png,command=\unexpanded{pdftocairo -r 600 -png \infile}}]{standalone}
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage{xeCJK}
+\usepackage{geometry}
+\newgeometry{
+    top=25.4mm, bottom=33.3mm, left=20mm, right=20mm,
+    headsep=10.4mm, headheight=5mm, footskip=7.9mm,
+}
+\graphicspath{{%s}}
+
+\begin{document}
+\thispagestyle{empty}
+%s
+\end{document}
+"""
+
+config = {
+    'input_texfile': 'tests/en/main.tex',
+    'output_docxfile': 'tests/en/main.docx',
+    'multifig_dir': 'tests/en/multifigs',
+    'reference_docfile': 'my_temp.docx',
+    'cslfile': 'ieee.csl',
+    'bibfile': 'tests/ref.bib',
+    'multifig_texfile_template': my_multifig_texfile_template,
+}
+
+converter = tex2docx.LatexToWordConverter(**config)
+converter.convert()
+```
+
+2. The output Word document's format still does not meet requirements
+
+Modify the styles in the `my_temp.docx` file using Word's style management.
+
+## Implementation Principles
+
+The core of this project is to use Pandoc and Pandoc-Crossref tools to convert LaTeX to Word, configured as follows:
 
 ```shell
 pandoc texfile -o docxfile \
@@ -108,19 +153,20 @@ pandoc texfile -o docxfile \
     -M tableEqns \
     -M reference-section-title=Reference \
     --bibliography=ref.bib \
-    --citeproc --csl ieee.csl
+    --citeproc --csl ieee.csl \
+    -t docx+native_numbering
 ```
 
-However, this method may encounter issues such as improper image importation and incorrect referencing when dealing with LaTeX files containing multi-figure images directly. To address this, the project extracts multi-figure image code from the LaTeX files and uses LaTeX's built-in `convert` and `pdftocairo` tools to automatically compile these images into a single large PNG format. These PNG files then replace the original image codes in the LaTeX document, ensuring smooth import of multi-figure images. For implementation details, see `tex2docx.py`.
+However, the method is not ideal for converting multi-figures. This project extracts the LaTeX file's multi-figure code and uses LaTeX's `convert` and `pdftocairo` tools to automatically compile these images into single large PNG files. Then, these PNG files replace the corresponding image codes in the original LaTeX document and update the references to ensure the multi-figure images are smoothly imported.
 
-## Outstanding Issues
+## Remaining Issues
 
-1. Refer to subfigures uniformly using `\ref{<figure_lab>}(a)`, not `\ref{<subfigure_lab>}` (direct subfigure referencing will be supported in future updates);
-2. The formatting of image captions and author information in the exported Word document needs manual adjustment.
+1. Chinese figure and table captions still begin with "Figure" and "Table";
+2. Author information is not fully converted.
 
 ## Other
 
-There are two kinds of people in the world, those who use LaTeX and those who do not. The latter often request Word versions of documents from the former. Thus, the following command was born:
+There are two kinds of people in the world: those who can use LaTeX and those who cannot. The latter often ask the former for Word versions of documents. Thus, the following command line is provided:
 
 ```bash
 pandoc input.tex -o output.docx\
@@ -130,5 +176,6 @@ pandoc input.tex -o output.docx\
   -M autoEqnLabels -M tableEqns \
   -M reference-section-title=Reference \
   --bibliography=my_ref.bib \
-  --citeproc --csl ieee.csl
+  --citeproc --csl ieee.csl \
+  -t docx+native_numbering
 ```

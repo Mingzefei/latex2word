@@ -12,7 +12,7 @@ class TestLatexToWordConverter(unittest.TestCase):
             'reference_docfile': '../my_temp.docx',
             'cslfile': '../ieee.csl',
             'bibfile': './ref.bib',
-            'debug': False
+            'debug': True
         }
         # config for tests/zh
         self.zh_config = {
@@ -22,7 +22,7 @@ class TestLatexToWordConverter(unittest.TestCase):
             'reference_docfile': '../my_temp.docx',
             'cslfile': '../ieee.csl',
             'bibfile': './ref.bib',
-            'debug': True
+            'debug': False
         }
 
     def test_convert_en(self):

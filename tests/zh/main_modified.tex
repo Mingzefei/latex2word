@@ -48,36 +48,38 @@
 
 \section{方法论}
 
-所提出方法的核心原则是尽可能将RBS中的电池并联，从而最大化输出电流。为了实现这一点，整体过程被分为图 \ref{fig:main} 所示的四个步骤。
+所提出方法的核心原则是尽可能将RBS中的电池并联，从而最大化输出电流。为了实现这一点，整体过程被分为图 \ref{multifig:multifig_main} 所示的四个步骤。
 ...
+
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.8\linewidth]{main.png}
+    \includegraphics[width=0.8\linewidth]{multifig_main.png}
     \caption{
         所提出方法的示意图，包含四个主要步骤。
     }
-    \label{fig:main}
+    \label{multifig:multifig_main}
 \end{figure}
+
 
 \subsection{有向图模型}
 
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.8\linewidth]{model.png}
-    \caption{{
+    \includegraphics[width=0.8\linewidth]{multifig_model.png}
+    \caption{
         所使用的有向图模型：(a) He等人的工作 \cite{heExploringAdaptiveReconfiguration2013}，(b) 我们之前的工作，(c) 本文改进的模型。(d) 本方法中电池的等效电路。
-    }}
-    \label{fig:model}
+    }
+    \label{multifig:multifig_model}
 \end{figure}
 
 
-He等人 \cite{heExploringAdaptiveReconfiguration2013} 提出了RBS的一个抽象有向图模型，其中节点代表电池，边代表配置灵活性，每个顶点的权重对应电池电压 (图 \ref{fig:model}(a))。
+He等人 \cite{heExploringAdaptiveReconfiguration2013} 提出了RBS的一个抽象有向图模型，其中节点代表电池，边代表配置灵活性，每个顶点的权重对应电池电压 (图 \ref{multifig:multifig_model}(a))。
 ...
-我们之前提出的有向图模型显著不同于He等人的模型，节点代表电池与开关之间的连接，且有向边代表电池与开关 (图 \ref{fig:model}(b))，从而实现RBS结构与其有向图模型的一一对应。
+我们之前提出的有向图模型显著不同于He等人的模型，节点代表电池与开关之间的连接，且有向边代表电池与开关 (图 \ref{multifig:multifig_model}(b))，从而实现RBS结构与其有向图模型的一一对应。
 ...
-图 \ref{fig:model}(c) 展示了本文使用的改进有向图模型。接下来详细解释了RBS中等效组件的方法及有向图模型的构建。
+图 \ref{multifig:multifig_model}(c) 展示了本文使用的改进有向图模型。接下来详细解释了RBS中等效组件的方法及有向图模型的构建。
 
 \subsection{约束条件与目标函数}
 
