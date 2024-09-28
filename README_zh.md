@@ -1,5 +1,6 @@
 # LaTeX 到 Word 文件转换工具
 
+日常工作中，不熟悉 LaTeX 的上级或同事常会要求提供 Word 文件，以便共同审阅和修改。
 本项目提供一个 Python 脚本，利用 Pandoc 和 Pandoc-Crossref 工具，将 LaTeX 文件自动地按照指定格式转换为 Word 文件。
 需要说明的是，目前仍没有完美将 LaTeX 转换为 Word 的方法，本项目生成的 Word 文件可满足非正式的审阅需求，其中约 5% 的内容（如作者信息等非正文内容）可能需要在转换后手动更正。
 
@@ -14,8 +15,8 @@
 效果如下，更多的结果请看 `tests` ：
 
 <p align="center">
-  <img src=".assets/en-word-1.jpg" width="200"/>
-  <img src=".assets/en-word-2.jpg" width="200"/>
+  <img src=".assets/en-word-1.jpg" width="300"/>
+  <img src=".assets/en-word-2.jpg" width="300"/>
 </p>
 
 
@@ -43,10 +44,16 @@ python ./tex2docx/tex2docx.py --input_texfile <your_texfile> --multifig_dir <dir
 
 ### 相关 Python 库
 
-安装 Python 依赖：
+本地安装：
 
 ```shell
 pip install -e .
+```
+
+或者从 PyPI 安装：
+
+```shell
+pip install tex2docx
 ```
 
 ## 使用说明及案例
@@ -58,23 +65,15 @@ pip install -e .
 在终端执行以下命令：
 
 ```shell
-python ./tex2docx/tex2docx.py --input_texfile <your_texfile> --multifig_dir <dir_saving_temporary_figs> --output_docxfile <your_docxfile> --reference_docfile <your_reference_docfile> --bibfile <your_bibfile> --cslfile <your_cslfile>
+convert --input-texfile <your_texfile> --multifig-dir <dir_saving_temporary_figs> --output-docxfile <your_docxfile> --reference-docfile <your_reference_docfile> --bibfile <your_bibfile> --cslfile <your_cslfile>
 ```
 
-参数说明：
-- `--input_texfile`：指定要转换的 LaTeX 文件的路径。
-- `--multifig_dir`：指定临时存放生成的多图文件的目录。
-- `--output_docxfile`：指定输出的 Word 文件的路径。
-- `--reference_docfile`：指定 Word 输出格式的参考文档，这有助于确保文档样式的一致性。
-- `--bibfile`：指定参考文献的 BibTeX 文件，用于文档中的引用。
-- `--cslfile`：指定引用样式文件（Citation Style Language），控制参考文献的格式。
-- `--debug`：开启调试模式以输出更多的运行信息，有助于排查问题。
-
+使用 `convert --help` 查看上述参数的说明。
 
 以 `tests/en` 测试案例为例，在仓库目录下执行如下命令：
 
 ```shell
-python ./tex2docx/tex2docx.py --input_texfile ./tests/en/main.tex --multifig_dir ./tests/en/multifigs --output_docxfile ./tests/en/main_cli.docx --reference_docfile ./my_temp.docx --bibfile ./tests/ref.bib --cslfile ./ieee.csl
+convert --input-texfile ./tests/en/main.tex --multifig-dir ./tests/en/multifigs --output-docxfile ./tests/en/main_cli.docx --reference-docfile ./my_temp.docx --bibfile ./tests/ref.bib --cslfile ./ieee.csl
 ```
 则可以在 `tests/en` 目录下找到转换后的 `main_cli.docx` 文件。
 
@@ -104,8 +103,8 @@ converter.convert()
 1. 多子图相对位置与原始 tex 文件编译结果不同，如以下两张图
 
 <p align="center">
-  <img src=".assets/raw_multifig_multi-L-charge-equalization.png" width="200"/>
-  <img src=".assets/modified_multifig_multi-L-charge-equalization.png" width="200"/>
+  <img src=".assets/raw_multifig_multi-L-charge-equalization.png" width="300"/>
+  <img src=".assets/modified_multifig_multi-L-charge-equalization.png" width="300"/>
 </p>
 
 可能是因为原始 tex 文件重新定义了页面尺寸等参数，需要将相关 tex 代码添加到 `MULTIFIG_TEXFILE_TEMPLATE` 变量中。以下为一个示例，请根据实际情况修改：
@@ -185,6 +184,15 @@ pandoc texfile -o docxfile \
 
 1. 中文的图表 caption 仍以 Fiugre 和 Table 开头；
 2. 作者信息无法完整转换。
+
+## 更新记录
+
+### v1.2.0
+
+1. 修复了模块导入问题，提升了稳定性。
+2. 改进了命令行工具的使用体验，使其更加直观和高效。
+3. 采用了 pyproject.toml 进行依赖管理，弃用了 setup.py。
+4. 正式在 PyPI 上发布，用户可通过 pip install tex2docx 进行安装。
 
 ## 其他
 

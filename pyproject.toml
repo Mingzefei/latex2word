@@ -1,0 +1,45 @@
+[build-system]
+requires = [
+    "setuptools", 
+    "setuptools_scm[toml]",
+    "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tex2docx"
+authors = [
+    {name = "Mingzefei", email = "huagb@qq.com"}
+]
+readme = "README.md"
+dynamic = ["version"]
+description = "A project to convert LaTeX to DOCX"
+requires-python = ">=3.8"
+dependencies = [
+  "regex",
+  "tqdm",
+  "typer",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+
+[project.optional-dependencies]
+dev = [
+    "ruff",
+    "mypy",
+    "pytest"
+]
+
+[project.scripts]
+"convert" = "tex2docx:cli.app"
+
+[tool.setuptools]
+packages = ["tex2docx"]
+
+[tool.setuptools_scm]
+version_scheme = "post-release"
+local_scheme = "no-local-version"

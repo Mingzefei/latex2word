@@ -13,3 +13,7 @@ tex2docx/__pycache__/
 tex2docx/*.egg-info/
 
 my_workbench
+
+build
+dist
+*.egg-info
