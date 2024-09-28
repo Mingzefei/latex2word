@@ -1,8 +1,12 @@
 # LaTeX 到 Word 文件转换工具
 
+![PyPI Downloads](https://img.shields.io/pypi/dm/tex2docx)![PyPI Version](https://img.shields.io/pypi/v/tex2docx)![PyPI License](https://img.shields.io/pypi/l/tex2docx)
+
 日常工作中，不熟悉 LaTeX 的上级或同事常会要求提供 Word 文件，以便共同审阅和修改。
 本项目提供一个 Python 脚本，利用 Pandoc 和 Pandoc-Crossref 工具，将 LaTeX 文件自动地按照指定格式转换为 Word 文件。
 需要说明的是，目前仍没有完美将 LaTeX 转换为 Word 的方法，本项目生成的 Word 文件可满足非正式的审阅需求，其中约 5% 的内容（如作者信息等非正文内容）可能需要在转换后手动更正。
+
+[本项目 Github 地址](https://github.com/Mingzefei/latex2word)
 
 ## 特性
 
@@ -12,7 +16,7 @@
 - 支持按照指定格式输出 Word
 - 支持中文
 
-效果如下，更多的结果请看 `tests` ：
+效果如下，更多的结果请看 [tests](./tests)：
 
 <p align="center">
   <img src=".assets/en-word-1.jpg" width="300"/>
