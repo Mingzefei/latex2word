@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LaTeX to Word Converter</title>
+</head>
+<body>
+    <h1>LaTeX to Word Converter</h1>
+    <form id="uploadForm" action="/convert" method="post" enctype="multipart/form-data">
+        <label for="texFile">Upload TeX file:</label>
+        <input type="file" id="texFile" name="texFile" accept=".tex" required><br><br>
+        <label for="imageFiles">Upload Image files:</label>
+        <input type="file" id="imageFiles" name="imageFiles" accept="image/*" multiple><br><br>
+        <button type="submit">Convert to Word</button>
+    </form>
+    <br>
+    <a id="downloadLink" href="#" style="display:none;">Download Converted Word File</a>
+    <br>
+    <script>
+        document.getElementById('uploadForm').onsubmit = async function(event) {
+            event.preventDefault();
+            const formData = new FormData(document.getElementById('uploadForm'));
+            const response = await fetch('/convert', {
+                method: 'POST',
+                body: formData
+            });
+            if (response.ok) {
+                const result = await response.json();
+                const downloadLink = document.getElementById('downloadLink');
+                downloadLink.href = result.downloadUrl;
+                downloadLink.style.display = 'block';
+            } else {
+                alert('File conversion failed.');
+            }
+        };
+    </script>
+</body>
+</html>

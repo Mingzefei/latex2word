@@ -1,0 +1,37 @@
+name: Convert LaTeX to Word
+
+on:
+  push:
+    paths:
+      - 'uploads/**'
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          pip install tex2docx
+          sudo apt-get install pandoc pandoc-crossref
+
+      - name: Convert LaTeX to Word
+        run: |
+          mkdir -p output
+          tex2docx --input-texfile uploads/input.tex --output-docxfile output/output.docx
+        env:
+          INPUT_TEXFILE: uploads/input.tex
+          OUTPUT_DOCXFILE: output/output.docx
+
+      - name: Upload output
+        uses: actions/upload-artifact@v2
+        with:
+          name: output-docx
+          path: output/output.docx
