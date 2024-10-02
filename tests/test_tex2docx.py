@@ -13,17 +13,13 @@ class TestLatexToWordConverter(unittest.TestCase):
             "reference_docfile": "../my_temp.docx",
             "cslfile": "../ieee.csl",
             "bibfile": "./ref.bib",
-            "debug": True,
+            "debug": False,
         }
         # config for tests/zh
         self.zh_config = {
             "input_texfile": "./zh/main.tex",
             "output_docxfile": "./zh/main.docx",
-            "multifig_dir": "./zh/multifigs",
-            "reference_docfile": "../my_temp.docx",
-            "cslfile": "../ieee.csl",
-            "bibfile": "./ref.bib",
-            "debug": False,
+            "debug": True,
         }
 
     def test_convert_en(self):

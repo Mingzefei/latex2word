@@ -41,11 +41,11 @@ class LatexToWordConverter:
     def __init__(
         self,
         input_texfile,
-        multifig_dir,
         output_docxfile,
-        reference_docfile,
-        bibfile,
-        cslfile,
+        multifig_dir=None,
+        bibfile=None,
+        cslfile=None,
+        reference_docfile=None,
         debug=False,
         multifig_texfile_template=None,
         multifig_figenv_template=None,
@@ -55,25 +55,38 @@ class LatexToWordConverter:
 
         Args:
             input_texfile (str): The path to the input LaTeX file.
-            multifig_dir (str): The directory where the created multi-figure LaTeX files will be stored.
             output_docxfile (str): The path to the output Word document file.
-            reference_docfile (str): The path to the reference Word document file.
-            bibfile (str): The path to the BibTeX file.
-            cslfile (str): The path to the CSL file.
+            multifig_dir (str, optional): The directory where the created multi-figure LaTeX files will be stored. Defaults to None (use the same directory as input_texfile).
+            bibfile (str, optional): The path to the BibTeX file. Defaults to None (use the first .bib file found in the same directory as input_texfile).
+            cslfile (str, optional): The path to the CSL file. Defaults to None (use the built-in ieee.csl file).
+            reference_docfile (str, optional): The path to the reference Word document file. Defaults to None (use the built-in default_temp.docx file).
             debug (bool, optional): Whether to enable debug mode. Defaults to False.
             multifig_texfile_template (str, optional): The template for generating multi-figure LaTeX files. Defaults to None.
             multifig_figenv_template (str, optional): The template for the figure environment in multi-figure LaTeX files. Defaults to None.
         """
         # Initialize file paths
         self.input_texfile = os.path.abspath(input_texfile)
-        self.multifig_dir = os.path.abspath(multifig_dir)
         self.output_texfile = os.path.abspath(
             input_texfile.replace(".tex", "_modified.tex")
         )
         self.output_docxfile = os.path.abspath(output_docxfile)
-        self.reference_docfile = os.path.abspath(reference_docfile)
-        self.bibfile = os.path.abspath(bibfile)
-        self.cslfile = os.path.abspath(cslfile)
+        self.reference_docfile = os.path.abspath(reference_docfile) if reference_docfile else os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "default_temp.docx"
+        )
+        if multifig_dir: # if multifig_dir is provided, use it
+            self.multifig_dir = os.path.abspath(multifig_dir)
+        else: # if multifig_dir is not provided, use the same directory as input_texfile
+            self.multifig_dir = os.path.join(os.path.dirname(self.input_texfile), "multifigs")
+        
+        if bibfile: # if bibfile is provided, use it
+            self.bibfile = os.path.abspath(bibfile)
+        else: # if bibfile is not provided, search for bibfile in the same directory as input_texfile
+            bibfile = glob.glob(os.path.join(os.path.dirname(self.input_texfile), "*.bib"))
+            self.bibfile = bibfile[0] if bibfile else None
+            
+        self.cslfile = os.path.abspath(cslfile) if cslfile else os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "ieee.csl"
+        )
         self.luafile = os.path.join(
             os.path.dirname(os.path.abspath(__file__)), "resolve_equation_labels.lua"
         )
@@ -511,30 +524,50 @@ class LatexToWordConverter:
             )
 
         # Define the command
-        command = [
-            "pandoc",
-            self.output_texfile,
-            "-o",
-            self.output_docxfile,
-            "--lua-filter",
-            self.luafile,
-            "--filter",
-            "pandoc-crossref",
-            "--reference-doc=" + self.reference_docfile,
-            "--number-sections",
-            "-M",
-            "autoEqnLabels",
-            "-M",
-            "tableEqns",
-            "-M",
-            "reference-section-title=Reference",
-            "--bibliography=" + self.bibfile,
-            "--citeproc",
-            "--csl",
-            self.cslfile,
-            "-t",
-            "docx+native_numbering",
-        ]
+        if self.bibfile is None: # if bibfile is not provided, do not use citation
+            command = [
+                "pandoc",
+                self.output_texfile,
+                "-o",
+                self.output_docxfile,
+                "--lua-filter",
+                self.luafile,
+                "--filter",
+                "pandoc-crossref",
+                "--reference-doc=" + self.reference_docfile,
+                "--number-sections",
+                "-M",
+                "autoEqnLabels",
+                "-M",
+                "tableEqns",
+                "-t",
+                "docx+native_numbering",
+            ]
+        else:
+            command = [
+                "pandoc",
+                self.output_texfile,
+                "-o",
+                self.output_docxfile,
+                "--lua-filter",
+                self.luafile,
+                "--filter",
+                "pandoc-crossref",
+                "--reference-doc=" + self.reference_docfile,
+                "--number-sections",
+                "-M",
+                "autoEqnLabels",
+                "-M",
+                "tableEqns",
+                "-M",
+                "reference-section-title=Reference",
+                "--bibliography=" + self.bibfile,
+                "--citeproc",
+                "--csl",
+                self.cslfile,
+                "-t",
+                "docx+native_numbering",
+            ]
 
         # Save the current working directory
         cwd = os.getcwd()
