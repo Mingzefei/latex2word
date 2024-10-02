@@ -28,10 +28,10 @@ Examples are shown below; more results are in [tests](./tests):
 Ensure Pandoc and Pandoc-Crossref are correctly installed (see [Install Dependencies](#install-dependencies)). Execute the following command in your terminal:
 
 ```shell
-python ./tex2docx/tex2docx.py --input_texfile <your_texfile> --multifig_dir <dir_saving_temporary_figs> --output_docxfile <your_docxfile> --reference_docfile <your_reference_docfile> --bibfile <your_bibfile> --cslfile <your_cslfile>
+convert --input-texfile <your_texfile> --output-docxfile <your_docxfile> 
 ```
 
-Replace `<...>` with appropriate file paths or folder names.
+Replace `<...>` in the command with the corresponding file path and name.
 
 ## Install Dependencies
 
@@ -188,6 +188,10 @@ The conversion for multi-figure LaTeX content may not be perfect. This project e
 2. Author information is not fully converted.
 
 ## Changelog
+
+### v1.2.1
+
+1. Improved default value settings, including built-in Word style templates and ieee.csl (used as default values).
 
 ### v1.2.0
 

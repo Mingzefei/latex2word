@@ -29,10 +29,10 @@
 确保已正确安装 Pandoc 和 Pandoc-Crossref 等依赖，详见[安装依赖](#安装依赖)。在命令行中执行以下命令：
 
 ```shell
-python ./tex2docx/tex2docx.py --input_texfile <your_texfile> --multifig_dir <dir_saving_temporary_figs> --output_docxfile <your_docxfile> --reference_docfile <your_reference_docfile> --bibfile <your_bibfile> --cslfile <your_cslfile>
+convert --input-texfile <your_texfile> --output-docxfile <your_docxfile> 
 ```
 
-将命令中的 `<...>` 替换为相应文件路径或文件夹名称即可。
+将命令中的 `<...>` 替换为相应文件路径名称即可。
 
 ## 安装依赖
 
@@ -190,6 +190,10 @@ pandoc texfile -o docxfile \
 2. 作者信息无法完整转换。
 
 ## 更新记录
+
+### v1.2.1
+
+1. 改进了默认值的设置，内置了 Word 样式模板和 ieee.csl （作为默认值使用）。
 
 ### v1.2.0
 
