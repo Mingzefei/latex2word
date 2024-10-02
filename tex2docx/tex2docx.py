@@ -70,22 +70,32 @@ class LatexToWordConverter:
             input_texfile.replace(".tex", "_modified.tex")
         )
         self.output_docxfile = os.path.abspath(output_docxfile)
-        self.reference_docfile = os.path.abspath(reference_docfile) if reference_docfile else os.path.join(
-            os.path.dirname(os.path.abspath(__file__)), "default_temp.docx"
+        self.reference_docfile = (
+            os.path.abspath(reference_docfile)
+            if reference_docfile
+            else os.path.join(
+                os.path.dirname(os.path.abspath(__file__)), "default_temp.docx"
+            )
         )
-        if multifig_dir: # if multifig_dir is provided, use it
+        if multifig_dir:  # if multifig_dir is provided, use it
             self.multifig_dir = os.path.abspath(multifig_dir)
-        else: # if multifig_dir is not provided, use the same directory as input_texfile
-            self.multifig_dir = os.path.join(os.path.dirname(self.input_texfile), "multifigs")
-        
-        if bibfile: # if bibfile is provided, use it
+        else:  # if multifig_dir is not provided, use the same directory as input_texfile
+            self.multifig_dir = os.path.join(
+                os.path.dirname(self.input_texfile), "multifigs"
+            )
+
+        if bibfile:  # if bibfile is provided, use it
             self.bibfile = os.path.abspath(bibfile)
-        else: # if bibfile is not provided, search for bibfile in the same directory as input_texfile
-            bibfile = glob.glob(os.path.join(os.path.dirname(self.input_texfile), "*.bib"))
+        else:  # if bibfile is not provided, search for bibfile in the same directory as input_texfile
+            bibfile = glob.glob(
+                os.path.join(os.path.dirname(self.input_texfile), "*.bib")
+            )
             self.bibfile = bibfile[0] if bibfile else None
-            
-        self.cslfile = os.path.abspath(cslfile) if cslfile else os.path.join(
-            os.path.dirname(os.path.abspath(__file__)), "ieee.csl"
+
+        self.cslfile = (
+            os.path.abspath(cslfile)
+            if cslfile
+            else os.path.join(os.path.dirname(os.path.abspath(__file__)), "ieee.csl")
         )
         self.luafile = os.path.join(
             os.path.dirname(os.path.abspath(__file__)), "resolve_equation_labels.lua"
@@ -524,7 +534,7 @@ class LatexToWordConverter:
             )
 
         # Define the command
-        if self.bibfile is None: # if bibfile is not provided, do not use citation
+        if self.bibfile is None:  # if bibfile is not provided, do not use citation
             command = [
                 "pandoc",
                 self.output_texfile,

@@ -1,6 +1,6 @@
 import unittest
 
-from tex2docx  import LatexToWordConverter
+from tex2docx import LatexToWordConverter
 
 
 class TestLatexToWordConverter(unittest.TestCase):
