@@ -1,30 +1,19 @@
 \documentclass[a4paper]{article}
 \usepackage[utf8]{inputenc}
 
-% Author affiliation
 \usepackage{authblk}
-% Package for line spacing
 \usepackage{setspace}
-\renewcommand{\baselinestretch}{2.0} % Double spacing
-% Margins
-\usepackage[margin=1.25in]{geometry}
-% Mathematics
+\renewcommand{\baselinestretch}{2.0} \usepackage[margin=1.25in]{geometry}
 \usepackage{amsmath}
-% Tables
 \usepackage{tabularx}
 \usepackage{booktabs}
-% SI units
 \usepackage{siunitx}
-% Links and referencing within the document
 \usepackage[backref]{hyperref}
 \hypersetup{hidelinks} 
-% Advanced math typesetting
 \usepackage{mathtools}
-% Graphics
 \usepackage{graphicx}
 \usepackage{subfig} 
-\graphicspath{{/home/ming/academic/tools/latex2word/tests/en/multifigs}} % Adjust path as needed
-
+\graphicspath{{/home/ming/academic/tools/latex2word/tests/en/multifigs}} 
 \title{This is only an example}
 
 \author[1$\dag$]{X}
@@ -46,7 +35,14 @@ Reconfigurable battery systems provide a promising alternative to traditional ba
 ...
 \end{abstract}
 
-\section{Methodology}
+\section{Check LaTeX comments have been removed}
+
+The central principle of the proposed method is to connect the batteries in an RBS in parallel to the maximum possible extent, thereby maximizing the output current. 
+This is not a comment: 90 \% samples were used for training, and the remaining 10 \% samples were used for testing.
+
+\section{Check Figures and their References}
+
+\subsection{Figure}
 
 The central principle of the proposed method is to connect the batteries in an RBS in parallel to the maximum possible extent, thereby maximizing the output current.
 To achieve this universally and automatically, the overall process is divided into the four steps shown in Fig. \ref{multifig:multifig_main}.
@@ -63,7 +59,7 @@ To achieve this universally and automatically, the overall process is divided in
 \end{figure}
 
 
-\subsection{Directed graph Model}
+\subsection{SubFigure}
 
 
 \begin{figure}[htbp]
@@ -77,7 +73,7 @@ To achieve this universally and automatically, the overall process is divided in
 \end{figure}
 
 
-(Check the ref of subfigures)
+\paragraph{Check the refs of subfigures}
 He et al. \cite{heExploringAdaptiveReconfiguration2013} proposed an abstracted directed graph model for an RBS, where the nodes represent the batteries, the edges represent the configuration flexibility, and the weight of each vertex corresponds to the battery voltage (Fig. \ref{multifig:multifig_model}(a)). 
 ...
 We previously proposed a directed graph model that differs significantly from He et al.'s model by using nodes to represent the connections between batteries and switches and directed edges to represent batteries and switches (Fig. \ref{multifig:multifig_model}(b)), allowing for a one-to-one correspondence between an RBS structure and its directed graph model. 
@@ -85,7 +81,7 @@ We previously proposed a directed graph model that differs significantly from He
 Fig. \ref{multifig:multifig_model}(c) shows the improved directed graph model used in this paper.
 The following provides a detailed explanation of the method used for equating components in RBSs and constructing the directed graph model.
 
-
+\paragraph{Check the refs of common figures}
 He et al. \cite{heExploringAdaptiveReconfiguration2013} proposed an abstracted directed graph model for an RBS, where the nodes represent the batteries, the edges represent the configuration flexibility, and the weight of each vertex corresponds to the battery voltage (Fig. \ref{multifig:multifig_model}(a)). 
 ...
 We previously proposed a directed graph model that differs significantly from He et al.'s model by using nodes to represent the connections between batteries and switches and directed edges to represent batteries and switches (Fig. \ref{multifig:multifig_model}(b)), allowing for a one-to-one correspondence between an RBS structure and its directed graph model. 
@@ -93,8 +89,7 @@ We previously proposed a directed graph model that differs significantly from He
 Fig. \ref{multifig:multifig_model}(c) shows the improved directed graph model used in this paper.
 The following provides a detailed explanation of the method used for equating components in an RBS and constructing the directed graph model.
 
-
-\subsection{Constraints and Objective Function}
+\section{Check Equations and their References}
 
 First, the topology in the directed graph model is represented in the form of a matrix $\boldsymbol{A}$, which is known as the incidence matrix and is defined as Eq. \eqref{eq:A}:
 \begin{align}\label{eq:A}
@@ -125,6 +120,8 @@ Similar to Eq. \eqref{eq:A_bso}, $\boldsymbol{\tilde{A}}$ can be rewritten as
         \boldsymbol{\tilde{A}}_b & \boldsymbol{\tilde{A}}_s & \boldsymbol{\tilde{A}}_o
     \end{bmatrix}.
 \end{equation}
+
+\section{Check BiBTeX References}
 
 \bibliographystyle{ieeetr}
 \bibliography{../ref}

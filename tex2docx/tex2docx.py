@@ -176,21 +176,23 @@ class LatexToWordConverter:
         """
         with open(self.input_texfile, "r") as file:
             self._raw_content = file.read()
+        # Remove all LaTeX comments
+        self._clean_content = regex.sub(r"((?<!\\)%.*\n)", "", self._raw_content)
         self._raw_fig_contents = self._match_pattern(
-            FIGURE_PATTERN, self._raw_content, mode="all"
+            FIGURE_PATTERN, self._clean_content, mode="all"
         )
 
         # Determine the figure package used in the LaTeX file (subfigure or subfig)
         if (
-            r"\usepackage{subfig}" in self._raw_content
-            or r"\begin{subfig}" in self._raw_content
-            or r"\subfloat" in self._raw_content
+            r"\usepackage{subfig}" in self._clean_content
+            or r"\begin{subfig}" in self._clean_content
+            or r"\subfloat" in self._clean_content
         ):
             self._figurepackage = "subfig"
         elif (
-            r"\usepackage{subfigure}" in self._raw_content
-            or r"\begin{subfigure}" in self._raw_content
-            or r"\subfigure" in self._raw_content
+            r"\usepackage{subfigure}" in self._clean_content
+            or r"\begin{subfigure}" in self._clean_content
+            or r"\subfigure" in self._clean_content
         ):
             self._figurepackage = "subfigure"
         else:
@@ -204,7 +206,7 @@ class LatexToWordConverter:
 
         # Determine graphicspath
         graphicspath = self._match_pattern(
-            GRAPHICSPATH_PATTERN, self._raw_content, mode="last"
+            GRAPHICSPATH_PATTERN, self._clean_content, mode="last"
         )
         if graphicspath:
             self._raw_graphicspath = os.path.abspath(
@@ -415,7 +417,7 @@ class LatexToWordConverter:
         Returns:
             None
         """
-        self._modified_content = self._raw_content
+        self._modified_content = self._clean_content
 
         # Redefine \graphicspath
         self._modified_content = regex.sub(
