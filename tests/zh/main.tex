@@ -1,39 +1,42 @@
 \documentclass[a4paper,UTF8]{ctexart}
 
-% Author affiliation
+% 作者信息
 \usepackage{authblk}
-% Package for line spacing
+% 行距设置
 \usepackage{setspace}
-\renewcommand{\baselinestretch}{2.0} % Double spacing
-% Margins
+\renewcommand{\baselinestretch}{2.0} % 双倍行距
+% 页边距
 \usepackage[margin=1.25in]{geometry}
-% Mathematics
+% 数学符号
 \usepackage{amsmath}
-% Tables
+% 表格
 \usepackage{tabularx}
 \usepackage{booktabs}
-% SI units
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{setspace}
+% SI 单位
 \usepackage{siunitx}
-% Links and referencing within the document
+% 超链接和文内引用
 \usepackage[backref]{hyperref}
 \hypersetup{hidelinks} 
-% Advanced math typesetting
+% 高级数学排版
 \usepackage{mathtools}
-% Graphics
+% 图片
 \usepackage{graphicx}
 \usepackage{subfig} 
-\graphicspath{{./figures}} % Adjust path as needed
+\graphicspath{{./figures}} % 根据需要调整路径
 
-\title{这只是一个示例}
+\title{一个示例测试文档}
 
-\author[1$\dag$]{X}
-\author[1$\dag$]{H}
-\author[1*]{Q}
-\author[1,2]{S}
+\author[1$\dag$]{作者A}
+\author[1$\dag$]{作者B}
+\author[1*]{作者C}
+\author[1,2]{作者D}
 
-\affil[1]{中国R学院}
-\affil[2]{中国A学院}
-\affil[*]{通讯作者：email}
+\affil[1]{示例研究学院，示例大学}
+\affil[2]{高级示例研究学院，示例大学}
+\affil[*]{通讯作者：example.email@university.edu}
 \affil[$\dag$]{这些作者对本文贡献相同。}
 
 \begin{document}
@@ -41,101 +44,145 @@
 \maketitle
 
 \begin{abstract}
-可重构电池系统由于其灵活且可动态改变的拓扑结构，可以适应不同的电池充放电策略，是传统电池系统的有力替代方案。
-...
+本文提供了一个学术论文的基本结构，其中包含用于测试表格、图片、公式和参考文献的示例。本文展示了常见的 LaTeX 命令和文档功能的示例。
 \end{abstract}
 
-\section{检查LaTeX注释是否已删除}
+\section{引言}
 
-提出的方法的核心原理是将RBS中的电池尽可能多地并联，从而最大化输出电流。% 这是文本后面的注释
-% 这是行间注释
+本文是一个测试示例，旨在帮助检查各种 LaTeX 排版技术，包括表格、图片和公式。在接下来的章节中，我们将展示这些功能。
 
-这不是注释：90 \% 的样本用于训练，剩下的 10 \% 样本用于测试。
+\section{表格}
 
-\section{检查图形及其引用}
+此部分包含一个简单的表格（表 \ref{tab:exampletable}）。
 
-\subsection{图形}
+\begin{table}[htbp]
+    \centering
+    \caption{
+        一个参数示例表。
+    }
+    \label{tab:exampletable}
+    \begin{tabular}{lcr}
+        \toprule
+        参数 & 符号 & 数值 \\
+        \midrule
+        示例参数 1 & $P_1$ & \SI{100}{\watt} \\
+        示例参数 2 & $P_2$ & \SI{50}{\meter} \\
+        示例参数 3 & $P_3$ & \SI{0.1}{\second} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
 
-提出的方法的核心原理是将RBS中的电池尽可能多地并联，从而最大化输出电流。为普遍实现这一目标，整个过程分为图 \ref{fig:main} 中的四个步骤。
-...
+表 \ref{table3} 展示了一个更复杂的表格。
+
+\begin{table}[h]
+    \begin{center}
+        \begin{spacing}{1.15}
+         \caption{示例全球经济指标}\label{table3}
+          \resizebox{0.85\hsize}{!}{
+        \begin{tabular}{|c|c|c|}
+            \hline
+            \textbf{区域} & \textbf{指标} & \textbf{数值}  \\
+            \hline
+
+            \multirow{7}{*}{\makecell[{}{p{3cm}}]{区域A}} 
+            & \multirow{3}{*}{\makecell[{}{p{3cm}}]{经济增长}} 
+            & 3.5\%  \\
+            \cline{3-3}
+            &    & 1.5 万亿  \\
+            \cline{3-3}
+            &    & 4.8\% 通货膨胀  \\
+            \cline{2-3}
+
+            & \multirow{4}{*}{\makecell[{}{p{3cm}}]{失业率}}  
+            & 5.1\%  \\
+            \cline{3-3}
+            &   & 2.4\% （青年）  \\
+            \cline{3-3}
+            &   & 4.7\% （女性）  \\
+            \cline{3-3}
+            &   & 3.2\% （男性） \\
+            \hline
+
+            \multirow{6}{*}{\makecell[{}{p{3cm}}]{区域B}} 
+            & \multirow{3}{*}{\makecell[{}{p{3cm}}]{经济增长}} 
+            & 2.1\%  \\
+            \cline{3-3}
+            &    & 0.9 万亿  \\
+            \cline{3-3}
+            &    & 2.3\% 通货膨胀  \\
+            \cline{2-3}
+
+            & \multirow{3}{*}{\makecell[{}{p{3cm}}]{失业率}}  
+            & 6.7\%  \\
+            \cline{3-3}
+            &   & 3.8\% （青年）  \\
+            \cline{3-3}
+            &   & 4.5\% （总计）  \\
+            \hline
+        \end{tabular}
+        }
+        \end{spacing}
+    \end{center}
+\end{table}
+
+
+\section{图片及其引用}
+
+\subsection{示例图片}
+
+下面是一个示例图片（图 \ref{fig:examplefig}），展示了可能代表流程或概念的图示。
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.8\linewidth]{main.png}
+    \includegraphics[width=0.8\linewidth]{example-figure}
     \caption{
-        提出的方法图解，包含四个主要步骤。
+        一个示例图片，展示了概念图。
     }
-    \label{fig:main}
+    \label{fig:examplefig}
 \end{figure}
 
 \subsection{子图}
 
+下面是一个包含 4 个子图的示例（图 \ref{fig:examplesubfigures}），分别为图 \ref{fig:subfigure1}、图 \ref{fig:subfigure2}、图 \ref{fig:subfigure3} 和图 \ref{fig:subfigure4}。
+
 \begin{figure}[htbp]
     \centering
     \subfloat[] {
-        \includegraphics[width=0.31\linewidth]{direct-graph-he.png}
-    }\label{fig:direct-graph-he}
+        \includegraphics[width=0.31\linewidth]{example-subfigure1}\label{fig:subfigure1}
+    }
     \subfloat[] {
-        \includegraphics[width=0.23\linewidth]{direct-graph-xu.png}
-    }\label{fig:direct-graph-xu}
+        \includegraphics[width=0.23\linewidth]{example-subfigure2}\label{fig:subfigure2}
+    }
     \subfloat[] {
-        \includegraphics[width=0.24\linewidth]{direct-graph-my.png}
-    }\label{fig:direct-graph-my}
+        \includegraphics[width=0.24\linewidth]{example-subfigure3}\label{fig:subfigure3}
+    }
     \\
     \subfloat[] {
-        \includegraphics[width=0.8\linewidth]{battery_simple.png}
-    }\label{fig:battery-simple}
-    \caption{
-        定向图模型： (a) He等人的工作 \cite{heExploringAdaptiveReconfiguration2013}，(b) 我们之前的工作，(c) 本文提出的改进模型。 (d) 本方法中的电池等效电路图。
+        \includegraphics[width=0.8\linewidth]{example-subfigure4}\label{fig:subfigure4}
     }
-    \label{fig:model}
+    \caption{
+        示例子图 (a) 子图 1，(b) 子图 2，(c) 子图 3，(d) 子图 4。
+    }
+    \label{fig:examplesubfigures}
 \end{figure}
 
-\paragraph{检查子图的引用}
-He等人 \cite{heExploringAdaptiveReconfiguration2013} 提出了一个RBS的抽象定向图模型，其中节点表示电池，边表示配置的灵活性，且每个顶点的权重对应于电池电压（图 \ref{fig:direct-graph-he}）。 
-...
-我们之前提出的定向图模型与He等人的模型显著不同，使用节点表示电池和开关之间的连接，并使用定向边表示电池和开关（图 \ref{fig:direct-graph-xu}），从而实现RBS结构与其定向图模型的一对一对应。
-...
-图 \ref{fig:direct-graph-my} 显示了本文中使用的改进定向图模型。
+\section{公式和方程}
 
-\paragraph{检查普通图的引用}
-He等人 \cite{heExploringAdaptiveReconfiguration2013} 提出了一个RBS的抽象定向图模型，其中节点表示电池，边表示配置的灵活性，且每个顶点的权重对应于电池电压（图 \ref{fig:model}(a)）。 
-...
-我们之前提出的定向图模型与He等人的模型显著不同，使用节点表示电池和开关之间的连接，并使用定向边表示电池和开关（图 \ref{fig:model}(b)），从而实现RBS结构与其定向图模型的一对一对应。
-...
-图 \ref{fig:model}(c) 显示了本文中使用的改进定向图模型。
+此部分包含一个公式的示例。关联矩阵的表达式如公式 \ref{eq:incidence} 所示：
 
-\section{检查公式及其引用}
-
-首先，定向图模型中的拓扑结构以矩阵$\boldsymbol{A}$的形式表示，称为关联矩阵，定义如公式 \eqref{eq:A}：
-\begin{align}\label{eq:A}
+\begin{align}\label{eq:incidence}
     a_{kl}=
     \begin{cases}
         1,  & \text{边 $l$ 离开节点 $k$},\\
         -1, & \text{边 $l$ 进入节点 $k$},\\
-        0,  & \text{其他情况}.
+        0,  & \text{其他情况},
     \end{cases}
 \end{align}
-对于由 $N$ 个节点和 $N_b+2N_s+1$ 条定向边组成的定向图，关联矩阵 $\boldsymbol{A}$ 是一个 $N\times(N_b+2N_s+1)$ 的矩阵。 
-在该矩阵中，行和列分别表示定向图的节点和边。
-通过区分与RBS对应的每一列的组件，$\boldsymbol{A}$ 可以重新写为
-\begin{equation}\label{eq:A_bso}
-    \boldsymbol{A} =
-    \begin{bmatrix}
-        \boldsymbol{A}_b & \boldsymbol{A}_s & \boldsymbol{A}_o
-    \end{bmatrix},
-\end{equation}
-其中 $\boldsymbol{A}_b$, $\boldsymbol{A}_s$ 和 $\boldsymbol{A}_o$ 分别是对应于电池、开关和外部负载的子矩阵。
-...
-类似于公式 \eqref{eq:A_bso}，$\boldsymbol{\tilde{A}}$ 可以重新写为
-\begin{equation}\label{eq:A_bso_tilde}
-    \boldsymbol{\tilde{A}} =
-    \begin{bmatrix}
-        \boldsymbol{\tilde{A}}_b & \boldsymbol{\tilde{A}}_s & \boldsymbol{\tilde{A}}_o
-    \end{bmatrix}.
-\end{equation}
+其中 $a_{kl}$ 是关联矩阵的元素，$k$ 是节点编号，$l$ 是边编号。
 
-\section{检查参考文献}
+\section{参考文献}
+
+此部分展示了如何引用参考文献 \cite{article1}。
 
 \bibliographystyle{ieeetr}
 \bibliography{../ref}

@@ -2,16 +2,21 @@
 \documentclass[preview,convert,convert={outext=.png,command=\unexpanded{pdftocairo -r 600 -png \infile}}]{standalone}
 \usepackage{graphicx}
 \usepackage{subfig}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{setspace}
+\usepackage{siunitx}
 \graphicspath{{/home/ming/academic/tools/latex2word/tests/zh/figures}}
 \usepackage{xeCJK}
 \begin{document}
 \thispagestyle{empty}
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.8\linewidth]{main.png}
+    \includegraphics[width=0.8\linewidth]{example-figure}
     %\caption{
-%        提出的方法图解，包含四个主要步骤。
+%        一个示例图片，展示了概念图。
 %    }
-    \label{fig:main}
+    \label{fig:examplefig}
 \end{figure}
 \end{document}
