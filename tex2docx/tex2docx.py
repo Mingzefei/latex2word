@@ -512,6 +512,10 @@ class LatexToWordConverter:
                 processed_table_content,
             )
 
+            # 如果出现 数字+cm 的形式
+            if regex.search(r"\d+cm", processed_table_content):
+                file_content = file_content.replace("varwidth=\\maxdimen", "varwidth=21cm")
+
             # Create the tex file
             file_path = os.path.join(self.temp_subtexfile_dir, filename)
             with open(file_path, "w") as file:
