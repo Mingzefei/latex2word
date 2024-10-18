@@ -1,0 +1,8 @@
+Internal Error: cairo context error: invalid value (typically too big) for the size of the input (surface, pattern, etc.)<0a>
+cairo error: invalid value (typically too big) for the size of the input (surface, pattern, etc.)
+libpng warning: Image width is zero in IHDR
+libpng warning: Image height is zero in IHDR
+libpng error: Invalid IHDR data
+Internal Error: Error during writing header
+Error writing tab_table3-1.png
+system returned with code 512

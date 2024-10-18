@@ -338,7 +338,12 @@ class LatexToWordConverter:
             # if the figure content contains \linewidth or \textwidth, change varwidth to 21cm
             # to fix the bug of too large pdf and png
             if r"\linewidth" in processed_figure_content or r"\textwidth" in processed_figure_content:
-                file_content = file_content.replace("varwidth=\\maxdimen", "varwidth=21cm")
+                if self._figurepackage == "subfig":
+                    file_content = file_content.replace("varwidth=\\maxdimen", "")
+                elif self._figurepackage == "subfigure":
+                    file_content = file_content.replace("varwidth=\\maxdimen", "varwidth=21cm")
+                else:
+                    pass
 
             # Create the tex file
             file_path = os.path.join(self.temp_subtexfile_dir, filename)
