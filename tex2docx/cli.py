@@ -10,10 +10,6 @@ def convert(
     output_docxfile: str = typer.Option(
         ..., help="The path to the output Word document."
     ),
-    multifig_dir: str = typer.Option(
-        None,
-        help="The directory for multi-figure LaTeX files. Defaults to None (use the same directory as input_texfile).",
-    ),
     reference_docfile: str = typer.Option(
         None,
         help="The path to the reference Word document. Defaults to None (use the built-in default_temp.docx file).",
@@ -26,16 +22,19 @@ def convert(
         None,
         help="The path to the CSL file. Defaults to None (use the built-in ieee.csl file).",
     ),
+    fix_table: bool = typer.Option(
+        True, help="Whether to fix tables with png. Defaults to True."
+    ),
     debug: bool = typer.Option(False, help="Enable debug mode. Defaults to False."),
 ):
     """Convert LaTeX to Word with the given options."""
     converter = LatexToWordConverter(
         input_texfile,
         output_docxfile,
-        multifig_dir=multifig_dir,
         reference_docfile=reference_docfile,
         bibfile=bibfile,
         cslfile=cslfile,
+        fix_table=fix_table,
         debug=debug,
     )
     converter.convert()

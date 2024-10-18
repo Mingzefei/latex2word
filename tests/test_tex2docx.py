@@ -9,17 +9,18 @@ class TestLatexToWordConverter(unittest.TestCase):
         self.en_config = {
             "input_texfile": "./en/main.tex",
             "output_docxfile": "./en/main.docx",
-            "multifig_dir": "./en/multifigs",
             "reference_docfile": "../my_temp.docx",
             "cslfile": "../ieee.csl",
             "bibfile": "./ref.bib",
-            "debug": False,
+            "debug": True,
         }
         # config for tests/zh
         self.zh_config = {
             "input_texfile": "./zh/main.tex",
             "output_docxfile": "./zh/main.docx",
-            "debug": True,
+            "bibfile": "./ref.bib",
+            "fix_table": True,
+            "debug": False,
         }
 
     def test_convert_en(self):
