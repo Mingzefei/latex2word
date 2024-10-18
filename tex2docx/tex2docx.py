@@ -412,7 +412,7 @@ class LatexToWordConverter:
                 else:
                     _input_subtexfiles = list(self._created_multifig_texfiles.values())
                 # Randomize the order of the tasks to balance the compilation time
-                random.shuffle(_input_subtexfiles)
+                # random.shuffle(_input_subtexfiles)
                 futures = {
                     executor.submit(self.compile_png_texfile, texfile)
                     for texfile in _input_subtexfiles
