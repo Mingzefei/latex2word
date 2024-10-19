@@ -19,8 +19,9 @@ In daily work, colleagues or supervisors unfamiliar with LaTeX may request Word 
 Examples are shown below; more results are in [tests](./tests):
 
 <p align="center">
-  <img src=".assets/en-word-1.jpg" width="300"/>
-  <img src=".assets/en-word-2.jpg" width="300"/>
+  <img src=".assets/en-word-1.jpg" width="200"/>
+  <img src=".assets/en-word-2.jpg" width="200"/>
+  <img src=".assets/en-word-3.jpg" width="200"/>
 </p>
 
 ## Quick Start
@@ -28,7 +29,7 @@ Examples are shown below; more results are in [tests](./tests):
 Ensure Pandoc and Pandoc-Crossref are correctly installed (see [Install Dependencies](#install-dependencies)). Execute the following command in your terminal:
 
 ```shell
-convert --input-texfile <your_texfile> --output-docxfile <your_docxfile> 
+tex2docx convert --input-texfile <your_texfile> --output-docxfile <your_docxfile> 
 ```
 
 Replace `<...>` in the command with the corresponding file path and name.
@@ -47,13 +48,7 @@ Install Pandoc-Crossref by following the [official documentation](https://github
 
 ### Python Libraries
 
-Install locally:
-
-```shell
-pip install -e .
-```
-
-Or install from PyPI:
+Install from PyPI:
 
 ```shell
 pip install tex2docx
@@ -68,7 +63,7 @@ This tool supports both command-line and script-based usage. Ensure the required
 Run the following command in your terminal:
 
 ```shell
-convert --input-texfile <your_texfile> --multifig-dir <dir_saving_temporary_figs> --output-docxfile <your_docxfile> --reference-docfile <your_reference_docfile> --bibfile <your_bibfile> --cslfile <your_cslfile>
+tex2docx convert --input-texfile <your_texfile> --output-docxfile <your_docxfile> --reference-docfile <your_reference_docfile> --bibfile <your_bibfile> --cslfile <your_cslfile>
 ```
 
 Use `convert --help` to see details on these parameters.
@@ -76,7 +71,7 @@ Use `convert --help` to see details on these parameters.
 For example, using `tests/en`:
 
 ```shell
-convert --input-texfile ./tests/en/main.tex --multifig-dir ./tests/en/multifigs --output-docxfile ./tests/en/main_cli.docx --reference-docfile ./my_temp.docx --bibfile ./tests/ref.bib --cslfile ./ieee.csl
+convert --input-texfile ./tests/en/main.tex --output-docxfile ./tests/en/main_cli.docx --reference-docfile ./my_temp.docx --bibfile ./tests/ref.bib --cslfile ./ieee.csl
 ```
 
 This will generate the Word file `main_cli.docx` in the `tests/en` directory.
@@ -89,10 +84,10 @@ from tex2docx import LatexToWordConverter
 config = {
     'input_texfile': '<your_texfile>',
     'output_docxfile': '<your_docxfile>',
-    'multifig_dir': '<dir_saving_temporary_figs>',
     'reference_docfile': '<your_reference_docfile>',
     'cslfile': '<your_cslfile>',
     'bibfile': '<your_bibfile>',
+    'fix_table': True,
     'debug': False
 }
 
@@ -108,8 +103,8 @@ For more examples, refer to `tests/test_tex2docx.py`.
    The relative positions of sub-figures may differ between LaTeX compilation and Word conversion, as shown below:
 
    <p align="center">
-     <img src=".assets/raw_multifig_multi-L-charge-equalization.png" width="300"/>
-     <img src=".assets/modified_multifig_multi-L-charge-equalization.png" width="300"/>
+     <img src=".assets/raw_multifig_multi-L-charge-equalization.png" width="100"/>
+     <img src=".assets/modified_multifig_multi-L-charge-equalization.png" width="100"/>
    </p>
 
    This may result from redefined page size or parameters in the LaTeX file. To address this, adjust the `MULTIFIG_TEXFILE_TEMPLATE` variable. Below is an example for reference:
@@ -138,7 +133,6 @@ For more examples, refer to `tests/test_tex2docx.py`.
    config = {
        'input_texfile': 'tests/en/main.tex',
        'output_docxfile': 'tests/en/main.docx',
-       'multifig_dir': 'tests/en/multifigs',
        'reference_docfile': 'my_temp.docx',
        'cslfile': 'ieee.csl',
        'bibfile': 'tests/ref.bib',
@@ -188,6 +182,22 @@ The conversion for multi-figure LaTeX content may not be perfect. This project e
 2. Author information is not fully converted.
 
 ## Changelog
+
+### v1.2.4
+
+1. Add support for `\include` in LaTeX texfiles. (#3)
+2. Enhanced the display of figures and tables for better formatting and presentation.
+
+3. Fixed conflicts between `cm` and `varwidth` in tables.
+4. Resolved conflict issues between `subfig` and `varwidth`.
+
+### v1.2.3
+
+1. Add feature and option to fix table (issue [#2](https://github.com/Mingzefei/latex2word/issues/2)).
+
+### v1.2.2
+
+1. fix comments bug [#1](https://github.com/Mingzefei/latex2word/issues/1).
 
 ### v1.2.1
 

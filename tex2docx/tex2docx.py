@@ -766,10 +766,12 @@ class LatexToWordConverter:
 
         This method performs the following steps:
         1. Analyzes the LaTeX file.
-        2. creates multiple figure LaTeX files.
-        3. Compiles the multiple figure LaTeX files.
-        4. creates the modified LaTeX file.
+        2. Creates multiple figure (and table) LaTeX files.
+        3. Compiles the multiple LaTeX files.
+        4. Creates the modified LaTeX file.
         5. Converts the modified LaTeX file to Word format.
+
+        Note: If the logger level is not set to DEBUG, temporary files will be cleaned up after conversion.
         """
         self.analyze_texfile()
         self.create_multifig_texfiles()

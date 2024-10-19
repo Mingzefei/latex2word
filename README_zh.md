@@ -19,8 +19,9 @@
 效果如下，更多的结果请看 [tests](./tests)：
 
 <p align="center">
-  <img src=".assets/en-word-1.jpg" width="300"/>
-  <img src=".assets/en-word-2.jpg" width="300"/>
+  <img src=".assets/en-word-1.jpg" width="200"/>
+  <img src=".assets/en-word-2.jpg" width="200"/>
+  <img src=".assets/en-word-3.jpg" width="200"/>
 </p>
 
 
@@ -29,7 +30,7 @@
 确保已正确安装 Pandoc 和 Pandoc-Crossref 等依赖，详见[安装依赖](#安装依赖)。在命令行中执行以下命令：
 
 ```shell
-convert --input-texfile <your_texfile> --output-docxfile <your_docxfile> 
+tex2docx convert --input-texfile <your_texfile> --output-docxfile <your_docxfile> 
 ```
 
 将命令中的 `<...>` 替换为相应文件路径名称即可。
@@ -48,13 +49,7 @@ convert --input-texfile <your_texfile> --output-docxfile <your_docxfile>
 
 ### 相关 Python 库
 
-本地安装：
-
-```shell
-pip install -e .
-```
-
-或者从 PyPI 安装：
+从 PyPI 安装：
 
 ```shell
 pip install tex2docx
@@ -69,7 +64,7 @@ pip install tex2docx
 在终端执行以下命令：
 
 ```shell
-convert --input-texfile <your_texfile> --multifig-dir <dir_saving_temporary_figs> --output-docxfile <your_docxfile> --reference-docfile <your_reference_docfile> --bibfile <your_bibfile> --cslfile <your_cslfile>
+tex2docx convert --input-texfile <your_texfile> --output-docxfile <your_docxfile> --reference-docfile <your_reference_docfile> --bibfile <your_bibfile> --cslfile <your_cslfile>
 ```
 
 使用 `convert --help` 查看上述参数的说明。
@@ -77,8 +72,9 @@ convert --input-texfile <your_texfile> --multifig-dir <dir_saving_temporary_figs
 以 `tests/en` 测试案例为例，在仓库目录下执行如下命令：
 
 ```shell
-convert --input-texfile ./tests/en/main.tex --multifig-dir ./tests/en/multifigs --output-docxfile ./tests/en/main_cli.docx --reference-docfile ./my_temp.docx --bibfile ./tests/ref.bib --cslfile ./ieee.csl
+convert --input-texfile ./tests/en/main.tex --output-docxfile ./tests/en/main_cli.docx --reference-docfile ./my_temp.docx --bibfile ./tests/ref.bib --cslfile ./ieee.csl
 ```
+
 则可以在 `tests/en` 目录下找到转换后的 `main_cli.docx` 文件。
 
 ### 脚本方式
@@ -89,10 +85,10 @@ from tex2docx import LatexToWordConverter
 config = {
     'input_texfile': '<your_texfile>',
     'output_docxfile': '<your_docxfile>',
-    'multifig_dir': '<dir_saving_temporary_figs>',
     'reference_docfile': '<your_reference_docfile>',
     'cslfile': '<your_cslfile>',
     'bibfile': '<your_bibfile>',
+    'fix_table': True,
     'debug': False
 }
 
@@ -106,10 +102,10 @@ converter.convert()
 
 1. 多子图相对位置与原始 tex 文件编译结果不同，如以下两张图
 
-<p align="center">
-  <img src=".assets/raw_multifig_multi-L-charge-equalization.png" width="300"/>
-  <img src=".assets/modified_multifig_multi-L-charge-equalization.png" width="300"/>
-</p>
+   <p align="center">
+     <img src=".assets/raw_multifig_multi-L-charge-equalization.png" width="100"/>
+     <img src=".assets/modified_multifig_multi-L-charge-equalization.png" width="100"/>
+   </p>
 
 可能是因为原始 tex 文件重新定义了页面尺寸等参数，需要将相关 tex 代码添加到 `MULTIFIG_TEXFILE_TEMPLATE` 变量中。以下为一个示例，请根据实际情况修改：
 ```python
@@ -136,7 +132,6 @@ my_multifig_texfile_template = r"""
 config = {
     'input_texfile': 'tests/en/main.tex',
     'output_docxfile': 'tests/en/main.docx',
-    'multifig_dir': 'tests/en/multifigs',
     'reference_docfile': 'my_temp.docx',
     'cslfile': 'ieee.csl',
     'bibfile': 'tests/ref.bib',
@@ -190,6 +185,22 @@ pandoc texfile -o docxfile \
 2. 作者信息无法完整转换。
 
 ## 更新记录
+
+### v1.2.4
+
+1. 增加对 LaTeX tex 文件中 `\include` 的支持。（#3）
+2. 增强了图表的显示效果，以改善格式和呈现。
+
+3. 修复了表格中 `cm` 和 `varwidth` 之间的冲突问题。
+4. 解决了 `subfig` 和 `varwidth` 之间的冲突问题。
+
+### v1.2.3
+
+1. 添加了修复表格的功能和选项（issue [#2](https://github.com/Mingzefei/latex2word/issues/2)）。
+
+### v1.2.2
+
+1. 修复了注释的错误（issue [#1](https://github.com/Mingzefei/latex2word/issues/1)）。
 
 ### v1.2.1
 
