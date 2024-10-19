@@ -19,9 +19,9 @@ In daily work, colleagues or supervisors unfamiliar with LaTeX may request Word 
 Examples are shown below; more results are in [tests](./tests):
 
 <p align="center">
-  <img src=".assets/en-word-1.jpg" width="200"/>
-  <img src=".assets/en-word-2.jpg" width="200"/>
-  <img src=".assets/en-word-3.jpg" width="200"/>
+  <img src=".assets/en-word-1.jpg" width="300"/>
+  <img src=".assets/en-word-2.jpg" width="300"/>
+  <img src=".assets/en-word-3.jpg" width="300"/>
 </p>
 
 ## Quick Start
@@ -103,8 +103,8 @@ For more examples, refer to `tests/test_tex2docx.py`.
    The relative positions of sub-figures may differ between LaTeX compilation and Word conversion, as shown below:
 
    <p align="center">
-     <img src=".assets/raw_multifig_multi-L-charge-equalization.png" width="100"/>
-     <img src=".assets/modified_multifig_multi-L-charge-equalization.png" width="100"/>
+     <img src=".assets/raw_multifig_multi-L-charge-equalization.png" width="200"/>
+     <img src=".assets/modified_multifig_multi-L-charge-equalization.png" width="200"/>
    </p>
 
    This may result from redefined page size or parameters in the LaTeX file. To address this, adjust the `MULTIFIG_TEXFILE_TEMPLATE` variable. Below is an example for reference:
