@@ -696,50 +696,35 @@ class LatexToWordConverter:
             )
 
         # Define the command
-        if self.bibfile is None:  # if bibfile is not provided, do not use citation
-            command = [
-                "pandoc",
-                self.output_texfile,
-                "-o",
-                self.output_docxfile,
-                "--lua-filter",
-                self.luafile,
-                "--filter",
-                "pandoc-crossref",
-                "--reference-doc=" + self.reference_docfile,
-                "--number-sections",
-                "-M",
-                "autoEqnLabels",
-                "-M",
-                "tableEqns",
-                "-t",
-                "docx+native_numbering",
-            ]
-        else:
-            command = [
-                "pandoc",
-                self.output_texfile,
-                "-o",
-                self.output_docxfile,
-                "--lua-filter",
-                self.luafile,
-                "--filter",
-                "pandoc-crossref",
-                "--reference-doc=" + self.reference_docfile,
-                "--number-sections",
-                "-M",
-                "autoEqnLabels",
-                "-M",
-                "tableEqns",
+        command = [
+            "pandoc",
+            self.output_texfile,
+            "-o",
+            self.output_docxfile,
+            "--lua-filter",
+            self.luafile,
+            "--filter",
+            "pandoc-crossref",
+            "--reference-doc=" + self.reference_docfile,
+            "--number-sections",
+            "-M",
+            "autoEqnLabels",
+            "-M",
+            "tableEqns",
+            "-t",
+            "docx+native_numbering",
+        ]
+
+        # Only add citation-related options if bibfile is provided
+        if self.bibfile is not None:
+            command.extend([
                 "-M",
                 "reference-section-title=Reference",
                 "--bibliography=" + self.bibfile,
                 "--citeproc",
                 "--csl",
                 self.cslfile,
-                "-t",
-                "docx+native_numbering",
-            ]
+            ])
 
         # Save the current working directory
         cwd = os.getcwd()
