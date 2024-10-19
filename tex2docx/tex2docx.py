@@ -1,7 +1,6 @@
 import concurrent.futures
 import glob
 import logging
-import random
 import os
 import shutil
 import subprocess
@@ -45,6 +44,7 @@ MODIFIED_TABENV_TEMPLATE = r"""
 \end{table}
 """
 
+INCLUD_PATTERN = r"\\include\{(.+?)\}"
 FIGURE_PATTERN = r"\\begin{figure}.*?\\end{figure}"
 TABLE_PATTERN = r"\\begin{table}.*?\\end{table}"
 # CAPTION_PATTERN = r'\\caption(\{(?>[^{}]+|(?1))*\})' # this pattern contain {}
@@ -96,8 +96,8 @@ class LatexToWordConverter:
             )
         )
         self.temp_subtexfile_dir = os.path.join(
-                os.path.dirname(self.input_texfile), "temp_subtexfile_dir"
-            )
+            os.path.dirname(self.input_texfile), "temp_subtexfile_dir"
+        )
 
         if bibfile:  # if bibfile is provided, use it
             self.bibfile = os.path.abspath(bibfile)
@@ -196,27 +196,44 @@ class LatexToWordConverter:
         """
         with open(self.input_texfile, "r") as file:
             self._raw_content = file.read()
+        self.logger.info(f"Read {os.path.basename(self.input_texfile)} texfile.")
+
         # Remove all LaTeX comments
         self._clean_content = regex.sub(r"((?<!\\)%.*\n)", "", self._raw_content)
-        self.logger.info(
-            f"Read {os.path.basename(self.input_texfile)} texfile."
+        self.logger.debug("Removed all LaTeX comments.")
+
+        # Replace all \include{...} with the content of the included file
+        include_files = regex.findall(INCLUD_PATTERN, self._clean_content)
+        for include_file in include_files:
+            # if include_file is not end with .tex, add .tex
+            include_filename = (
+                include_file + ".tex"
+                if not include_file.endswith(".tex")
+                else include_file
+            )
+            include_file_path = os.path.join(
+                os.path.dirname(self.input_texfile), include_filename
+            )
+            with open(include_file_path, "r") as file:
+                include_content = file.read()
+            self._clean_content = self._clean_content.replace(
+                r"\include{" + include_file + "}", include_content
+            )
+        self.logger.debug(
+            "Replaced all \\include{...} with the content of the included file."
         )
 
         # Get all figure environments in the LaTeX file
         self._clean_fig_contents = self._match_pattern(
             FIGURE_PATTERN, self._clean_content, mode="all"
         )
-        self.logger.info(
-            f"Found {len(self._clean_fig_contents)} figenvs."
-        )
+        self.logger.info(f"Found {len(self._clean_fig_contents)} figenvs.")
 
         # Get all table environments in the LaTeX file
         self._clean_tab_contents = self._match_pattern(
             TABLE_PATTERN, self._clean_content, mode="all"
         )
-        self.logger.info(
-            f"Found {len(self._clean_tab_contents)} tabenvs."
-        )
+        self.logger.info(f"Found {len(self._clean_tab_contents)} tabenvs.")
 
         # Determine the figure package used in the LaTeX file (subfigure or subfig)
         if (
@@ -256,7 +273,6 @@ class LatexToWordConverter:
         self.logger.debug(
             f"Init input figure directory(_raw_graphicspath): {self._raw_graphicspath}"
         )
-
 
         # Determine if _clean_fig_contents contains Chinese characters
         if any(
@@ -334,14 +350,19 @@ class LatexToWordConverter:
                 os.path.abspath(os.path.join("..", self._raw_graphicspath)),
                 processed_figure_content,
             )
-            
+
             # if the figure content contains \linewidth or \textwidth, change varwidth to 21cm
             # to fix the bug of too large pdf and png
-            if r"\linewidth" in processed_figure_content or r"\textwidth" in processed_figure_content:
+            if (
+                r"\linewidth" in processed_figure_content
+                or r"\textwidth" in processed_figure_content
+            ):
                 if self._figurepackage == "subfig":
                     file_content = file_content.replace("varwidth=\\maxdimen", "")
                 elif self._figurepackage == "subfigure":
-                    file_content = file_content.replace("varwidth=\\maxdimen", "varwidth=21cm")
+                    file_content = file_content.replace(
+                        "varwidth=\\maxdimen", "varwidth=21cm"
+                    )
                 else:
                     pass
 
@@ -382,12 +403,12 @@ class LatexToWordConverter:
             check=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
-            text=True
+            text=True,
         )
-        
+
         with open(texfile.replace(".tex", ".out"), "w") as f:
             f.write(result.stdout)
-        with open(texfile.replace(".tex", ".err"), 'w') as f:
+        with open(texfile.replace(".tex", ".err"), "w") as f:
             f.write(result.stderr)
         return texfile
 
@@ -413,7 +434,9 @@ class LatexToWordConverter:
             # Compile each .tex file
             with concurrent.futures.ProcessPoolExecutor() as executor:
                 if self.fix_table:
-                    _input_subtexfiles = list(self._created_multifig_texfiles.values()) + list(self._created_tab_texfiles.values())
+                    _input_subtexfiles = list(
+                        self._created_multifig_texfiles.values()
+                    ) + list(self._created_tab_texfiles.values())
                 else:
                     _input_subtexfiles = list(self._created_multifig_texfiles.values())
                 # Randomize the order of the tasks to balance the compilation time
@@ -514,7 +537,9 @@ class LatexToWordConverter:
 
             # 如果出现 数字+cm 的形式
             if regex.search(r"\d+cm", processed_table_content):
-                file_content = file_content.replace("varwidth=\\maxdimen", "varwidth=21cm")
+                file_content = file_content.replace(
+                    "varwidth=\\maxdimen", "varwidth=21cm"
+                )
 
             # Create the tex file
             file_path = os.path.join(self.temp_subtexfile_dir, filename)
@@ -731,7 +756,7 @@ class LatexToWordConverter:
         self.logger.info(
             f"Converted {os.path.basename(self.output_texfile)} texfile to {os.path.basename(self.output_docxfile)} docxfile."
         )
-        
+
     def clean_temp_files(self):
         """
         Clean the temporary files created during the conversion process.
@@ -745,7 +770,7 @@ class LatexToWordConverter:
             shutil.rmtree(self.temp_subtexfile_dir)
 
         self.logger.info("Cleaned temporary files.")
-        
+
         if os.path.exists(self.output_texfile):
             os.remove(self.output_texfile)
         self.logger.info(f"Removed {os.path.basename(self.output_texfile)}.")

@@ -1,0 +1,66 @@
+\documentclass[a4paper]{article}
+\usepackage[utf8]{inputenc}
+
+% Author affiliation
+\usepackage{authblk}
+% Package for line spacing
+\usepackage{setspace}
+\renewcommand{\baselinestretch}{2.0} % Double spacing
+% Margins
+\usepackage[margin=1.25in]{geometry}
+% Mathematics
+\usepackage{amsmath}
+% Tables
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{setspace}
+% SI units
+\usepackage{siunitx}
+% Links and referencing within the document
+\usepackage[backref]{hyperref}
+\hypersetup{hidelinks} 
+% Advanced math typesetting
+\usepackage{mathtools}
+% Graphics
+\usepackage{graphicx}
+\usepackage{subfig} 
+\graphicspath{{./figures}} % Adjust path as needed
+
+\title{An Example Test Document}
+
+\author[1$\dag$]{Author A}
+\author[1$\dag$]{Author B}
+\author[1*]{Author C}
+\author[1,2]{Author D}
+
+\affil[1]{School of Example Studies, Example University}
+\affil[2]{School of Advanced Example Studies, Example University}
+\affil[*]{Address correspondence to: example.email@university.edu}
+\affil[$\dag$]{These authors contributed equally to this work.}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This document provides a basic structure for an academic paper with test examples for tables, figures, formulas, and references. It includes examples of common LaTeX commands and document features.
+\end{abstract}
+
+\section{Introduction}
+
+This document is a test example designed to help check various LaTeX formatting techniques, including tables, figures, and formulas. In the following sections, we will demonstrate these features.
+
+\include{./tex/tables}
+\include{./tex/figures}
+\include{./tex/equations}
+
+\section{References}
+
+This section includes an example of how to cite references\cite{article1}.
+
+\bibliographystyle{ieeetr}
+\bibliography{../ref}
+
+\end{document}

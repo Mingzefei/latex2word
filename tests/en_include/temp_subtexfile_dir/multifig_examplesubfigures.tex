@@ -1,0 +1,33 @@
+
+\documentclass[preview,convert,convert={outext=.png,command=\unexpanded{pdftocairo -r 500 -png \infile}},]{standalone}
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{setspace}
+\usepackage{siunitx}
+\graphicspath{{/home/ming/academic/tools/latex2word/tests/en_include/figures}}
+\begin{document}
+\thispagestyle{empty}
+\begin{figure}[htbp]
+    \centering
+    \subfloat[]{
+        \includegraphics[width=0.31\linewidth]{example-subfigure1}\label{fig:subfigure1}
+    }
+    \subfloat[]{
+        \includegraphics[width=0.23\linewidth]{example-subfigure2}\label{fig:subfigure2}
+    }
+    \subfloat[]{
+        \includegraphics[width=0.24\linewidth]{example-subfigure3}\label{fig:subfigure3}
+    }
+    \\
+    \subfloat[]{
+        \includegraphics[width=0.8\linewidth]{example-subfigure4}\label{fig:subfigure4}
+    }
+    %\caption{
+%        Example subfigures (a) Subfigure 1, (b) Subfigure 2, (c) Subfigure 3, and (d) Subfigure 4.
+%    }
+    \label{fig:examplesubfigures}
+\end{figure}
+\end{document}

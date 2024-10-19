@@ -1,0 +1,29 @@
+
+\documentclass[preview,convert,convert={outext=.png,command=\unexpanded{pdftocairo -r 500 -png \infile}},varwidth=\maxdimen]{standalone}
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{setspace}
+\usepackage{siunitx}
+\graphicspath{{/home/ming/academic/tools/latex2word/tests/en_include/figures}}
+\begin{document}
+\thispagestyle{empty}
+\begin{table}[htbp]
+    \centering
+    %\caption{
+%        An example table with parameters.
+%    }
+    \label{tab:exampletable}
+    \begin{tabular}{lcr}
+        \toprule
+        Parameter & Symbol & Value \\
+        \midrule
+        Example Parameter 1 & $P_1$ & \SI{100}{\watt} \\
+        Example Parameter 2 & $P_2$ & \SI{50}{\meter} \\
+        Example Parameter 3 & $P_3$ & \SI{0.1}{\second} \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+\end{document}

@@ -1,4 +1,4 @@
-\documentclass[a4paper]{book}
+\documentclass[a4paper]{article}
 \usepackage[utf8]{inputenc}
 
 \usepackage{authblk}
@@ -16,7 +16,7 @@
 \usepackage{mathtools}
 \usepackage{graphicx}
 \usepackage{subfig} 
-\graphicspath{{/home/ming/academic/tools/latex2word/tests/en_chapter/temp_subtexfile_dir}} 
+\graphicspath{{/home/ming/academic/tools/latex2word/tests/en_include/temp_subtexfile_dir}} 
 \title{An Example Test Document}
 
 \author[1$\dag$]{Author A}
@@ -33,14 +33,13 @@
 
 \maketitle
 
-\chapter{Introduction}
+\begin{abstract}
+This document provides a basic structure for an academic paper with test examples for tables, figures, formulas, and references. It includes examples of common LaTeX commands and document features.
+\end{abstract}
+
+\section{Introduction}
 
 This document is a test example designed to help check various LaTeX formatting techniques, including tables, figures, and formulas. In the following sections, we will demonstrate these features.
-
-\chapter{TFF}
-
-This is a chapter with some text. 
-You can check the references number here, like Fig. 1.1 or Fig. 1.
 
 \section{Tables}
 
@@ -70,7 +69,6 @@ Tab. \ref{table3} shows a more complex table.
     \includegraphics[width=\linewidth]{tab_table3.png}
     \end{tabular}
 \end{table}
-
 
 
 \section{Figures and their References}
@@ -103,7 +101,6 @@ Below is an example of subfigures (Fig. \ref{multifig:multifig_examplesubfigures
     }
     \label{multifig:multifig_examplesubfigures}
 \end{figure}
-
 
 \section{Formulas and Equations}
 
