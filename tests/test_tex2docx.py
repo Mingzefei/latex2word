@@ -14,6 +14,14 @@ class TestLatexToWordConverter(unittest.TestCase):
             "bibfile": "./ref.bib",
             "debug": True,
         }
+        self.en_chapter_config = {
+            "input_texfile": "./en_chapter/main.tex",
+            "output_docxfile": "./en_chapter/main.docx",
+            "reference_docfile": "../my_temp.docx",
+            "cslfile": "../ieee.csl",
+            "bibfile": "./ref.bib",
+            "debug": True,
+        }
         # config for tests/zh
         self.zh_config = {
             "input_texfile": "./zh/main.tex",
@@ -26,6 +34,11 @@ class TestLatexToWordConverter(unittest.TestCase):
     def test_convert_en(self):
         # test convert en
         converter = LatexToWordConverter(**self.en_config)
+        converter.convert()
+
+    def test_convert_en_chapter(self):
+        # test convert en
+        converter = LatexToWordConverter(**self.en_chapter_config)
         converter.convert()
 
     def test_convert_zh(self):

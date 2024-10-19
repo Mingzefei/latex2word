@@ -1,0 +1,63 @@
+
+\documentclass[preview,convert,convert={outext=.png,command=\unexpanded{pdftocairo -r 500 -png \infile}},varwidth=21cm]{standalone}
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{setspace}
+\usepackage{siunitx}
+\graphicspath{{/home/ming/academic/tools/latex2word/tests/en_chapter/figures}}
+\begin{document}
+\thispagestyle{empty}
+\begin{table}[h]
+    \begin{center}
+        \begin{spacing}{1.15}
+         %\caption{Example Global Economic Indicators}\label{table3}
+          \resizebox{0.85\hsize}{!}{
+        \begin{tabular}{|c|c|c|}
+            \hline
+            \textbf{Region} & \textbf{Indicator} & \textbf{Value}  \\
+            \hline
+
+            \multirow{7}{*}{\makecell[{}{p{3cm}}]{Region A}} 
+            & \multirow{3}{*}{\makecell[{}{p{3cm}}]{Economic Growth}} 
+            & 3.5\%  \\
+            \cline{3-3}
+            &    & 1.5 trillion  \\
+            \cline{3-3}
+            &    & 4.8\% Inflation  \\
+            \cline{2-3}
+
+            & \multirow{4}{*}{\makecell[{}{p{3cm}}]{Unemployment Rate}}  
+            & 5.1\%  \\
+            \cline{3-3}
+            &   & 2.4\% (Youth)  \\
+            \cline{3-3}
+            &   & 4.7\% (Women)  \\
+            \cline{3-3}
+            &   & 3.2\% (Men) \\
+            \hline
+
+            \multirow{6}{*}{\makecell[{}{p{3cm}}]{Region B}} 
+            & \multirow{3}{*}{\makecell[{}{p{3cm}}]{Economic Growth}} 
+            & 2.1\%  \\
+            \cline{3-3}
+            &    & 0.9 trillion  \\
+            \cline{3-3}
+            &    & 2.3\% Inflation  \\
+            \cline{2-3}
+
+            & \multirow{3}{*}{\makecell[{}{p{3cm}}]{Unemployment Rate}}  
+            & 6.7\%  \\
+            \cline{3-3}
+            &   & 3.8\% (Youth)  \\
+            \cline{3-3}
+            &   & 4.5\% (Total)  \\
+            \hline
+        \end{tabular}
+        }
+        \end{spacing}
+    \end{center}
+\end{table}
+\end{document}
