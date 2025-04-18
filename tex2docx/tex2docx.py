@@ -54,7 +54,6 @@ REF_PATTERN = r"\\ref\{(.*?)\}"
 GRAPHICSPATH_PATTERN = r"\\graphicspath\{\{(.+?)\}\}"
 INCLUDEGRAPHICS_PATTERN = r"\\includegraphics(?s:.*?)}"
 
-
 class LatexToWordConverter:
     def __init__(
         self,
@@ -222,6 +221,9 @@ class LatexToWordConverter:
         self.logger.debug(
             "Replaced all \\include{...} with the content of the included file."
         )
+        # Remove all LaTeX comments
+        self._clean_content = regex.sub(r"((?<!\\)%.*\n)", "", self._clean_content)
+        self.logger.debug("Removed all LaTeX comments of included files.")
 
         # Get all figure environments in the LaTeX file
         self._clean_fig_contents = self._match_pattern(
@@ -540,6 +542,8 @@ class LatexToWordConverter:
                 file_content = file_content.replace(
                     "varwidth=\\maxdimen", "varwidth=21cm"
                 )
+                
+            file_content = file_content.replace("\ContinuedFloat", "")
 
             # Create the tex file
             file_path = os.path.join(self.temp_subtexfile_dir, filename)
@@ -741,6 +745,7 @@ class LatexToWordConverter:
         self.logger.info(
             f"Converted {os.path.basename(self.output_texfile)} texfile to {os.path.basename(self.output_docxfile)} docxfile."
         )
+        self.logger.debug(f"Command: {' '.join(command)}")
 
     def clean_temp_files(self):
         """
