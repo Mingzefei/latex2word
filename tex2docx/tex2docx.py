@@ -5,12 +5,14 @@ import os
 import shutil
 import subprocess
 import uuid
+from pathlib import Path
 
 import regex
 from tqdm import tqdm
 
-# Templates and patterns # TODO(Hua): get those package from raw_texfile
-MULTIFIG_TEXFILE_TEMPLATE = r"""
+class LatexToWordConverter:
+    # --- Templates ---
+    MULTIFIG_TEXFILE_TEMPLATE = r"""
 \documentclass[preview,convert,convert={outext=.png,command=\unexpanded{pdftocairo -r 500 -png \infile}},varwidth=\maxdimen]{standalone}
 \usepackage{graphicx}
 \usepackage{subfig}
@@ -25,7 +27,7 @@ MULTIFIG_TEXFILE_TEMPLATE = r"""
 %s
 \end{document}
 """
-MULTIFIG_FIGENV_TEMPLATE = r"""
+    MULTIFIG_FIGENV_TEMPLATE = r"""
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\linewidth]{%s}
@@ -33,7 +35,7 @@ MULTIFIG_FIGENV_TEMPLATE = r"""
     \label{%s}
 \end{figure}
 """
-MODIFIED_TABENV_TEMPLATE = r"""
+    MODIFIED_TABENV_TEMPLATE = r"""
 \begin{table}[htbp]
     \centering
     \caption{%s}
@@ -43,18 +45,17 @@ MODIFIED_TABENV_TEMPLATE = r"""
     \end{tabular}
 \end{table}
 """
+    # --- Patterns ---
+    INCLUD_PATTERN = r"\\include\{(.+?)\}"
+    FIGURE_PATTERN = r"\\begin{figure}.*?\\end{figure}"
+    TABLE_PATTERN = r"\\begin{table}.*?\\end{table}"
+    CAPTION_PATTERN = r"\\caption\{([^{}]*(?:\{(?1)\}[^{}]*)*)\}"
+    LABEL_PATTERN = r"\\label\{(.*?)\}"
+    REF_PATTERN = r"\\ref\{(.*?)\}"
+    GRAPHICSPATH_PATTERN = r"\\graphicspath\{\{(.+?)\}\}"
+    INCLUDEGRAPHICS_PATTERN = r"\\includegraphics(?s:.*?)}"
 
-INCLUD_PATTERN = r"\\include\{(.+?)\}"
-FIGURE_PATTERN = r"\\begin{figure}.*?\\end{figure}"
-TABLE_PATTERN = r"\\begin{table}.*?\\end{table}"
-# CAPTION_PATTERN = r'\\caption(\{(?>[^{}]+|(?1))*\})' # this pattern contain {}
-CAPTION_PATTERN = r"\\caption\{([^{}]*(?:\{(?1)\}[^{}]*)*)\}"
-LABEL_PATTERN = r"\\label\{(.*?)\}"
-REF_PATTERN = r"\\ref\{(.*?)\}"
-GRAPHICSPATH_PATTERN = r"\\graphicspath\{\{(.+?)\}\}"
-INCLUDEGRAPHICS_PATTERN = r"\\includegraphics(?s:.*?)}"
 
-class LatexToWordConverter:
     def __init__(
         self,
         input_texfile,
@@ -71,8 +72,8 @@ class LatexToWordConverter:
         Initializes the main class of the latex2word tool.
 
         Args:
-            input_texfile (str): The path to the input LaTeX file.
-            output_docxfile (str): The path to the output Word document file.
+            input_texfile (str or Path): The path to the input LaTeX file.
+            output_docxfile (str or Path): The path to the output Word document file.
             bibfile (str, optional): The path to the BibTeX file. Defaults to None (use the first .bib file found in the same directory as input_texfile).
             cslfile (str, optional): The path to the CSL file. Defaults to None (use the built-in ieee.csl file).
             reference_docfile (str, optional): The path to the reference Word document file. Defaults to None (use the built-in default_temp.docx file).
@@ -82,11 +83,11 @@ class LatexToWordConverter:
             fix_table (bool, optional): Whether to fix tables. Defaults to True.
         """
         # Initialize file paths
-        self.input_texfile = os.path.abspath(input_texfile)
+        self.input_texfile = os.path.abspath(str(input_texfile))
         self.output_texfile = os.path.abspath(
-            input_texfile.replace(".tex", "_modified.tex")
+            str(input_texfile).replace(".tex", "_modified.tex")
         )
-        self.output_docxfile = os.path.abspath(output_docxfile)
+        self.output_docxfile = os.path.abspath(str(output_docxfile))
         self.reference_docfile = (
             os.path.abspath(reference_docfile)
             if reference_docfile
@@ -99,7 +100,7 @@ class LatexToWordConverter:
         )
 
         if bibfile:  # if bibfile is provided, use it
-            self.bibfile = os.path.abspath(bibfile)
+            self.bibfile = os.path.abspath(str(bibfile))
         else:  # if bibfile is not provided, search for bibfile in the same directory as input_texfile
             bibfile = glob.glob(
                 os.path.join(os.path.dirname(self.input_texfile), "*.bib")
@@ -127,14 +128,14 @@ class LatexToWordConverter:
         self._multifig_texfile_template = (
             multifig_texfile_template
             if multifig_texfile_template
-            else MULTIFIG_TEXFILE_TEMPLATE
+            else self.MULTIFIG_TEXFILE_TEMPLATE # Use class attribute
         )
         self._multifig_figenv_template = (
             multifig_figenv_template
             if multifig_figenv_template
-            else MULTIFIG_FIGENV_TEMPLATE
+            else self.MULTIFIG_FIGENV_TEMPLATE # Use class attribute
         )
-        self._modified_tabenv_template = MODIFIED_TABENV_TEMPLATE
+        self._modified_tabenv_template = self.MODIFIED_TABENV_TEMPLATE # Use class attribute
         self.fix_table = fix_table
 
         # Initialize logger
@@ -202,7 +203,7 @@ class LatexToWordConverter:
         self.logger.debug("Removed all LaTeX comments.")
 
         # Replace all \include{...} with the content of the included file
-        include_files = regex.findall(INCLUD_PATTERN, self._clean_content)
+        include_files = regex.findall(self.INCLUD_PATTERN, self._clean_content) # Use class attribute
         for include_file in include_files:
             # if include_file is not end with .tex, add .tex
             include_filename = (
@@ -227,13 +228,13 @@ class LatexToWordConverter:
 
         # Get all figure environments in the LaTeX file
         self._clean_fig_contents = self._match_pattern(
-            FIGURE_PATTERN, self._clean_content, mode="all"
+            self.FIGURE_PATTERN, self._clean_content, mode="all" # Use class attribute
         )
         self.logger.info(f"Found {len(self._clean_fig_contents)} figenvs.")
 
         # Get all table environments in the LaTeX file
         self._clean_tab_contents = self._match_pattern(
-            TABLE_PATTERN, self._clean_content, mode="all"
+            self.TABLE_PATTERN, self._clean_content, mode="all" # Use class attribute
         )
         self.logger.info(f"Found {len(self._clean_tab_contents)} tabenvs.")
 
@@ -261,7 +262,7 @@ class LatexToWordConverter:
 
         # Determine graphicspath
         graphicspath = self._match_pattern(
-            GRAPHICSPATH_PATTERN, self._clean_content, mode="last"
+            self.GRAPHICSPATH_PATTERN, self._clean_content, mode="last" # Use class attribute
         )
         if graphicspath:
             self._raw_graphicspath = os.path.abspath(
@@ -286,6 +287,12 @@ class LatexToWordConverter:
                 r"\begin{document}", r"\usepackage{xeCJK}" + "\n" + r"\begin{document}"
             )
 
+    def _comment_caption_in_content(self, content):
+        """Helper function to comment out captions in a given content string."""
+        def comment_caption_match(match):
+            return "\n".join("%" + line for line in match.group(0).split("\n"))
+        return regex.sub(self.CAPTION_PATTERN, comment_caption_match, content) # Use class attribute
+
     def create_multifig_texfiles(self):
         """
         Create multiple tex files for each figure in the raw figure contents.
@@ -304,23 +311,12 @@ class LatexToWordConverter:
         os.makedirs(self.temp_subtexfile_dir)
 
         for figure_content in self._clean_fig_contents:
-            # Define a function to prepend a '%' character to each caption line
-            # This effectively comments out the caption lines in LaTeX
-
-            def comment_caption(match):
-                # Add a '%' character before each caption line
-                commented = "\n".join("%" + line for line in match.group(0).split("\n"))
-                return commented
-
-            # Apply the function to each caption in the figure content
-            # This comments out all captions in the figure content
-            processed_figure_content = regex.sub(
-                CAPTION_PATTERN, comment_caption, figure_content
-            )
+            # Comment out captions
+            processed_figure_content = self._comment_caption_in_content(figure_content)
 
             # Find the last label of the figure
             labels = self._match_pattern(
-                LABEL_PATTERN, processed_figure_content, mode="all"
+                self.LABEL_PATTERN, processed_figure_content, mode="all" # Use class attribute
             )
             if labels:
                 filename = labels[-1]
@@ -488,23 +484,12 @@ class LatexToWordConverter:
         default_counter = 0
 
         for table_content in self._clean_tab_contents:
-            # Define a function to prepend a '%' character to each caption line
-            # This effectively comments out the caption lines in LaTeX
-
-            def comment_caption(match):
-                # Add a '%' character before each caption line
-                commented = "\n".join("%" + line for line in match.group(0).split("\n"))
-                return commented
-
-            # Apply the function to each caption in the table content
-            # This comments out all captions in the table content
-            processed_table_content = regex.sub(
-                CAPTION_PATTERN, comment_caption, table_content
-            )
+            # Comment out captions
+            processed_table_content = self._comment_caption_in_content(table_content)
 
             # Find the last label of the table
             labels = self._match_pattern(
-                LABEL_PATTERN, processed_table_content, mode="all"
+                self.LABEL_PATTERN, processed_table_content, mode="all" # Use class attribute
             )
             if labels:
                 filename = labels[-1]
@@ -554,24 +539,51 @@ class LatexToWordConverter:
                 f"Created texfile {os.path.basename(file_path)} under {os.path.basename(self.temp_subtexfile_dir)}."
             )
 
-    def create_modified_texfile(self):
-        """
-        creates a modified .tex file by replacing figure contents and updating \graphicspath.
+    def _update_figure_references(self, original_fig_content, multifig_label):
+        """Updates references for a single figure environment."""
+        subfig_labels = []
+        # Find all occurrences of '\includegraphics'
+        includegraphics_occurrences = regex.finditer(
+            self.INCLUDEGRAPHICS_PATTERN, original_fig_content # Use class attribute
+        )
+        for occurrence in includegraphics_occurrences:
+            content_after_includegraphics = original_fig_content[occurrence.end() :]
+            label_occurrence = regex.search(
+                self.LABEL_PATTERN, content_after_includegraphics # Use class attribute
+            )
+            if (
+                label_occurrence
+                and "includegraphics" not in content_after_includegraphics[: label_occurrence.end()]
+                and "caption" not in content_after_includegraphics[: label_occurrence.end()]
+            ):
+                subfig_labels.append(label_occurrence.group(1))
+            else:
+                subfig_labels.append("")
 
-        This method iterates over the figure contents in the raw content of the .tex file and replaces them with modified
-        figure contents. It also updates the \graphicspath to the specified multifig_dir. Finally, it writes the modified
-        content to a new .tex file.
+        for subfig_index, subfig_label in enumerate(subfig_labels):
+            if subfig_label:
+                raw_subfig_ref = r"\ref{%s}" % subfig_label
+                modified_subfig_ref = r"\ref{%s}(%s)" % (
+                    multifig_label,
+                    chr(ord("a") + subfig_index),
+                )
+                self._modified_content = self._modified_content.replace(
+                    raw_subfig_ref, modified_subfig_ref
+                )
 
-        Returns:
-            None
-        """
-        self._modified_content = self._clean_content
+        fig_label = self._match_pattern(self.LABEL_PATTERN, original_fig_content, mode="last") # Use class attribute
+        if fig_label and fig_label not in subfig_labels:
+            raw_fig_ref = r"\ref{%s}" % fig_label
+            modified_fig_ref = r"\ref{%s}" % multifig_label
+            self._modified_content = self._modified_content.replace(
+                raw_fig_ref, modified_fig_ref
+            )
 
-        # Replace the figure contents with modified figure contents
+    def _replace_figure_environments(self):
+        """Replaces original figure environments with image includes and updates references."""
         for fig_index, fig_content in enumerate(self._clean_fig_contents):
-            # Replace the old figure content with the new figure content
             multifig_caption = self._match_pattern(
-                CAPTION_PATTERN, fig_content, mode="last"
+                self.CAPTION_PATTERN, fig_content, mode="last" # Use class attribute
             )
             multifig_label = "multifig:" + os.path.basename(
                 self._created_multifig_texfiles[fig_index]
@@ -579,6 +591,7 @@ class LatexToWordConverter:
             png_file = os.path.basename(
                 self._created_multifig_texfiles[fig_index]
             ).replace(".tex", ".png")
+
             self.logger.debug(
                 f"Modify figure in texfile with:\ncaption: {multifig_caption}\nlabel: {multifig_label}\npng_file: {png_file}"
             )
@@ -591,84 +604,48 @@ class LatexToWordConverter:
                 fig_content, modified_figure_content
             )
 
-            # Update the references to the subfigures
-            subfig_labels = []
+            # Update references related to this figure
+            self._update_figure_references(fig_content, multifig_label)
 
-            # Find all occurrences of '\includegraphics' in the figure content
-            includegraphics_occurrences = regex.finditer(
-                INCLUDEGRAPHICS_PATTERN, fig_content
+    def _replace_table_environments(self):
+        """Replaces original table environments with image includes."""
+        for tab_index, tab_content in enumerate(self._clean_tab_contents):
+            tab_caption = self._match_pattern(
+                self.CAPTION_PATTERN, tab_content, mode="last" # Use class attribute
             )
-            for occurrence in includegraphics_occurrences:
-                # Get the content after the current '\includegraphics'
-                content_after_includegraphics = fig_content[occurrence.end() :]
-                # Search for '\label' in the content after the current '\includegraphics'
-                label_occurrence = regex.search(
-                    LABEL_PATTERN, content_after_includegraphics
-                )
-                # If '\label' is found and there is no other '\includegraphics' or '\caption' before it
-                if (
-                    label_occurrence
-                    and "includegraphics"
-                    not in content_after_includegraphics[: label_occurrence.end()]
-                    and "caption"
-                    not in content_after_includegraphics[: label_occurrence.end()]
-                ):
-                    # Add the label to the list of subfigure labels
-                    subfig_labels.append(label_occurrence.group(1))
-                else:
-                    # If no '\label' is found, add an empty string to the list of subfigure labels
-                    subfig_labels.append("")
+            tab_label = self._match_pattern(self.LABEL_PATTERN, tab_content, mode="last") # Use class attribute
+            png_file = os.path.basename(
+                self._created_tab_texfiles[tab_index]
+            ).replace(".tex", ".png")
 
-            for subfig_index, subfig_label in enumerate(subfig_labels):
-                if subfig_label:
-                    raw_subfig_ref = r"\ref{%s}" % subfig_label
-                    modified_subfig_ref = r"\ref{%s}(%s)" % (
-                        multifig_label,
-                        chr(ord("a") + subfig_index),
-                    )
-                    self._modified_content = self._modified_content.replace(
-                        raw_subfig_ref, modified_subfig_ref
-                    )
+            self.logger.debug(
+                f"Modify table in texfile with:\ncaption: {tab_caption}\nlabel: {tab_label}\npng_file: {png_file}"
+            )
+            modified_table_content = self._modified_tabenv_template % (
+                tab_caption,
+                tab_label,
+                png_file,
+            )
+            self._modified_content = self._modified_content.replace(
+                tab_content, modified_table_content
+            )
 
-            # Update the references to the figure (multifig)
-            fig_label = self._match_pattern(LABEL_PATTERN, fig_content, mode="last")
-            if fig_label in subfig_labels:
-                # this figure label is used in subfigure
-                pass
-            else:
-                # this figure label is used as a whole figure
-                raw_fig_ref = r"\ref{%s}" % fig_label
-                modified_fig_ref = r"\ref{%s}" % multifig_label
-                self._modified_content = self._modified_content.replace(
-                    raw_fig_ref, modified_fig_ref
-                )
+    def create_modified_texfile(self):
+        """
+        Creates a modified .tex file by replacing figure/table contents and updating \graphicspath.
+        """
+        self._modified_content = self._clean_content
 
+        # Replace figure environments and update references
+        self._replace_figure_environments()
+
+        # Replace table environments if fix_table is True
         if self.fix_table:
-            # Replace the table contents with modified table contents
-            for tab_index, tab_content in enumerate(self._clean_tab_contents):
-                # Replace the old figure content with the new figure content
-                tab_caption = self._match_pattern(
-                    CAPTION_PATTERN, tab_content, mode="last"
-                )
-                tab_label = self._match_pattern(LABEL_PATTERN, tab_content, mode="last")
-                png_file = os.path.basename(
-                    self._created_tab_texfiles[tab_index]
-                ).replace(".tex", ".png")
-                self.logger.debug(
-                    f"Modify table in texfile with:\ncaption: {tab_caption}\nlabel: {tab_label}\npng_file: {png_file}"
-                )
-                modified_table_content = self._modified_tabenv_template % (
-                    tab_caption,
-                    tab_label,
-                    png_file,
-                )
-                self._modified_content = self._modified_content.replace(
-                    tab_content, modified_table_content
-                )
+            self._replace_table_environments()
 
         # Redefine \graphicspath
         self._modified_content = regex.sub(
-            GRAPHICSPATH_PATTERN,
+            self.GRAPHICSPATH_PATTERN, # Use class attribute
             r"\\graphicspath{{%s}}" % self.temp_subtexfile_dir,
             self._modified_content,
         )
@@ -758,12 +735,19 @@ class LatexToWordConverter:
         """
         if os.path.exists(self.temp_subtexfile_dir):
             shutil.rmtree(self.temp_subtexfile_dir)
+            self.logger.info(f"Removed temporary directory: {self.temp_subtexfile_dir}")
+        else:
+            self.logger.info("Temporary directory not found, skipping removal.")
 
-        self.logger.info("Cleaned temporary files.")
 
         if os.path.exists(self.output_texfile):
-            os.remove(self.output_texfile)
-        self.logger.info(f"Removed {os.path.basename(self.output_texfile)}.")
+            try:
+                os.remove(self.output_texfile)
+                self.logger.info(f"Removed {os.path.basename(self.output_texfile)}.")
+            except OSError as e:
+                self.logger.error(f"Error removing {self.output_texfile}: {e}")
+        else:
+             self.logger.info(f"{os.path.basename(self.output_texfile)} not found, skipping removal.")
 
     def convert(self):
         """
@@ -778,12 +762,15 @@ class LatexToWordConverter:
 
         Note: If the logger level is not set to DEBUG, temporary files will be cleaned up after conversion.
         """
-        self.analyze_texfile()
-        self.create_multifig_texfiles()
-        if self.fix_table:
-            self.create_table_texfiles()
-        self.compile_png_texfiles()
-        self.create_modified_texfile()
-        self.convert_modified_texfile()
-        if not self.logger.level == logging.DEBUG:
-            self.clean_temp_files()
+        try: # Add try...finally block for cleanup
+            self.analyze_texfile()
+            # Consider moving temp dir creation here using _setup_temp_dir
+            self.create_multifig_texfiles()
+            if self.fix_table:
+                self.create_table_texfiles()
+            self.compile_png_texfiles()
+            self.create_modified_texfile()
+            self.convert_modified_texfile()
+        finally: # Ensure cleanup happens even if errors occur
+            if not self.logger.level == logging.DEBUG:
+                self.clean_temp_files()
