@@ -16,7 +16,8 @@
 \usepackage{mathtools}
 \usepackage{graphicx}
 \usepackage{subfig} 
-\graphicspath{{/home/ming/tools/latex2word/tests/en_chapter/temp_subtexfile_dir}} 
+ 
+\graphicspath{{temp_subtexfile_dir/}}
 \title{An Example Test Document}
 
 \author[1$\dag$]{Author A}
@@ -44,7 +45,7 @@ You can check the references number here, like Fig. 1.1 or Fig. 1.
 
 \section{Tables}
 
-There is a simple table in this section (Tab. \ref{tab:exampletable}).
+There is a simple table in this section (Tab. \ref{tab:tab_exampletable}).
 
 
 \begin{table}[htbp]
@@ -52,20 +53,20 @@ There is a simple table in this section (Tab. \ref{tab:exampletable}).
     \caption{
         An example table with parameters.
     }
-    \label{tab:exampletable}
+    \label{tab:tab_exampletable}
     \begin{tabular}{l}
     \includegraphics[width=\linewidth]{tab_exampletable.png}
     \end{tabular}
 \end{table}
 
 
-Tab. \ref{table3} shows a more complex table.
+Tab. \ref{tab:tab_table3} shows a more complex table.
 
 
 \begin{table}[htbp]
     \centering
     \caption{Example Global Economic Indicators}
-    \label{table3}
+    \label{tab:tab_table3}
     \begin{tabular}{l}
     \includegraphics[width=\linewidth]{tab_table3.png}
     \end{tabular}
@@ -92,7 +93,7 @@ Below is an example figure (Fig. \ref{multifig:multifig_examplefig}) showing a d
 
 \subsection{Subfigures}
 
-Below is an example of subfigures (Fig. \ref{multifig:multifig_examplesubfigures}), which contains 4 subfigures (Fig. \ref{multifig:multifig_examplesubfigures}(a), Fig. \ref{multifig:multifig_examplesubfigures}(b), Fig. \ref{multifig:multifig_examplesubfigures}(c), and Fig. \ref{multifig:multifig_examplesubfigures}(d)).
+Below is an example of subfigures (Fig. \ref{fig:examplesubfigures}), which contains 4 subfigures (Fig. \ref{multifig:multifig_examplesubfigures}(a), Fig. \ref{multifig:multifig_examplesubfigures}(b), Fig. \ref{multifig:multifig_examplesubfigures}(c), and Fig. \ref{multifig:multifig_examplesubfigures}(d)).
 
 
 \begin{figure}[htbp]

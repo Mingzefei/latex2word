@@ -67,15 +67,20 @@ pip install tex2docx
 tex2docx convert --input-texfile <your_texfile> --output-docxfile <your_docxfile> --reference-docfile <your_reference_docfile> --bibfile <your_bibfile> --cslfile <your_cslfile>
 ```
 
-使用 `convert --help` 查看上述参数的说明。
+使用 `tex2docx convert --help` 查看上述参数的说明。
 
 以 `tests/en` 测试案例为例，在仓库目录下执行如下命令：
 
 ```shell
-convert --input-texfile ./tests/en/main.tex --output-docxfile ./tests/en/main_cli.docx --reference-docfile ./my_temp.docx --bibfile ./tests/ref.bib --cslfile ./ieee.csl
+tex2docx convert --input-texfile ./tests/en/main.tex --output-docxfile ./tests/en/main_cli.docx --reference-docfile ./my_temp.docx --bibfile ./tests/ref.bib --cslfile ./ieee.csl
 ```
 
 则可以在 `tests/en` 目录下找到转换后的 `main_cli.docx` 文件。
+
+**注意**: 如果你使用 `uv pip install -e .` 以可编辑模式安装了此工具，直接在终端运行 `tex2docx` 可能提示找不到命令。这是因为包含该命令的路径可能未添加到系统的 `PATH` 环境变量中。你可以：
+1.  激活 `uv` 管理的虚拟环境（通常是 `.venv`）：`source .venv/bin/activate`，然后再运行 `tex2docx`。
+2.  使用 `uv run` 命令：`uv run tex2docx convert ...`，`uv` 会在正确的项目环境中执行命令。
+3.  检查 `~/.local/bin` 是否在你的 `PATH` 中，如果脚本安装在此处。
 
 ### 脚本方式
 

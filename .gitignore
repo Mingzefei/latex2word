@@ -6,6 +6,8 @@
 **.out
 **.gz
 **.blg
+**.fls
+**.fdb_latexmk
 
 **:Zone.Identifier
 
