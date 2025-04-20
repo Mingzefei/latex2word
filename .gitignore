@@ -20,3 +20,6 @@ dist
 *.egg-info
 TODO.md
 external
+tests/__pycache__/
+tests/**/figures
+tests/**/temp_subtexfile_dir
