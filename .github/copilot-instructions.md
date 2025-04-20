@@ -20,6 +20,7 @@
   - `test:` for tests
   - `chore:` for miscellaneous tasks
 - Format: `<type>(optional scope): <description>`
+- Write commit messages in English.
 
 ## Python Code Style
 - Follow PEP 8 guidelines.
