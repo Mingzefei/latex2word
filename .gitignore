@@ -25,3 +25,4 @@ external
 tests/__pycache__/
 tests/**/figures
 tests/**/temp_subtexfile_dir
+tests/**/*.docx
