@@ -95,7 +95,7 @@ converter = LatexToWordConverter(**config)
 converter.convert()
 ```
 
-For more examples, refer to `tests/test_tex2docx.py`.
+For more examples, refer to `tests/test_integration.py`.
 
 ## FAQ
 
@@ -182,6 +182,31 @@ The conversion for multi-figure LaTeX content may not be perfect. This project e
 2. Author information is not fully converted.
 
 ## Changelog
+
+### v1.3.0
+
+1. **Major code refactoring**: Complete modular restructuring of the codebase
+   - Split monolithic `tex2docx.py` (1139 lines) into 8 specialized modules for better maintainability
+   - Introduced clear separation of concerns with dedicated modules for configuration, parsing, conversion, etc.
+   - Enhanced type annotations and error handling throughout the codebase
+
+2. **Improved testing infrastructure**: 
+   - Renamed and reorganized test files for better clarity:
+     - `test_tex2docx_refactored.py` → `test_unit.py` (unit tests for individual components)
+     - `test_tex2docx.py` → `test_integration.py` (end-to-end integration tests)
+   - Added comprehensive test documentation in `tests/README.md`
+   - Enhanced pytest configuration with proper markers and test discovery
+
+3. **Critical bug fixes**:
+   - Fixed LaTeX reference line break issue where `\ref{}` commands were incorrectly split as `\nef{}`
+   - Resolved CLI import errors with proper module structure
+   - Enhanced reference numbering accuracy for tables, figures, and equations
+
+4. **Developer experience improvements**:
+   - Better project structure with clear module boundaries
+   - Comprehensive documentation updates
+   - Cleaner development workflow with organized test suites
+   - Preserved all existing functionality while improving code quality
 
 ### v1.2.4
 

@@ -1,6 +1,20 @@
-"""Tests for the LatexToWordConverter class."""
+"""Integration tests for the LatexToWordConverter class.
 
-import os
+This module contains end-to-end integration tests that verify the complete
+conversion workflow from LaTeX documents to Word documents. These tests
+exercise the full functionality of the tex2docx package by running actual
+conversions and checking that output files are generated successfully.
+
+Test scenarios:
+- Basic English document conversion
+- English document with chapters
+- English document with includes  
+- Chinese document conversion
+
+Note: These tests require manual verification of the generated Word documents
+to ensure proper formatting, references, and content layout.
+"""
+
 import pytest  # Use pytest instead of unittest
 from pathlib import Path  # Use pathlib for better path handling
 from typing import Dict, Any

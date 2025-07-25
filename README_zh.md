@@ -101,7 +101,7 @@ converter = LatexToWordConverter(**config)
 converter.convert()
 ```
 
-案例可以参考`tests/test_tex2docx.py`。
+案例可以参考`tests/test_integration.py`。
 
 ## 常见问题
 
@@ -190,6 +190,31 @@ pandoc texfile -o docxfile \
 2. 作者信息无法完整转换。
 
 ## 更新记录
+
+### v1.3.0
+
+1. **重大代码重构**：完整的模块化重构
+   - 将原有单体式 `tex2docx.py`（1139行）拆分为8个专门的模块，提高可维护性
+   - 引入清晰的关注点分离，为配置、解析、转换等功能设置专门模块
+   - 在整个代码库中增强类型注解和错误处理
+
+2. **改进测试基础设施**：
+   - 重命名和重组测试文件以提高清晰度：
+     - `test_tex2docx_refactored.py` → `test_unit.py`（单个组件的单元测试）
+     - `test_tex2docx.py` → `test_integration.py`（端到端集成测试）
+   - 在 `tests/README.md` 中添加全面的测试文档
+   - 通过适当的标记和测试发现增强pytest配置
+
+3. **关键错误修复**：
+   - 修复LaTeX引用换行问题，其中 `\ref{}` 命令被错误地分割为 `\nef{}`
+   - 通过适当的模块结构解决CLI导入错误
+   - 增强表格、图片和公式的引用编号准确性
+
+4. **开发者体验改进**：
+   - 具有清晰模块边界的更好项目结构
+   - 全面的文档更新
+   - 通过有组织的测试套件实现更清洁的开发工作流程
+   - 在提高代码质量的同时保留所有现有功能
 
 ### v1.2.4
 

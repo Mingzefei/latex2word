@@ -14,6 +14,7 @@ readme = "README.md"
 dynamic = ["version"]
 description = "A project to convert LaTeX to DOCX"
 requires-python = ">=3.8"
+license = {text = "MIT"}
 dependencies = [
   "regex",
   "tqdm",
@@ -22,7 +23,6 @@ dependencies = [
 classifiers = [
     "Development Status :: 4 - Beta",
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
 
@@ -43,3 +43,24 @@ packages = ["tex2docx"]
 [tool.setuptools_scm]
 version_scheme = "post-release"
 local_scheme = "no-local-version"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "--verbose",
+    "--tb=short",
+    "--strict-markers",
+]
+markers = [
+    "integration: marks tests as integration tests (need manual verification)",
+    "unit: marks tests as unit tests (automated verification only)",
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+]
+
+[dependency-groups]
+dev = [
+    "build>=1.2.2.post1",
+]

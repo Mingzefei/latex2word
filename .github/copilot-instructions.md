@@ -1,4 +1,6 @@
-# GitHub Copilot Custom Instructions for Python Project
+# GitHub Copilot Custom Instructions for Latex2word Python Project
+
+This project aims to build a Python script tool that converts LaTeX documents to Word documents. The core functionality utilizes Pandoc and Pandoc-Crossref tools to automatically convert LaTeX files to Word files in specified formats, including the conversion and automatic numbering of formulas, images, tables, and references.
 
 ## Dependency Management
 - This Python project uses **uv** to manage dependencies.
