@@ -14,7 +14,7 @@ readme = "README.md"
 dynamic = ["version"]
 description = "A project to convert LaTeX to DOCX"
 requires-python = ">=3.8"
-license = "MIT"
+license = {text = "MIT"}
 dependencies = [
   "regex",
   "tqdm",
